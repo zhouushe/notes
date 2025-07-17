@@ -160,4 +160,5 @@ user.save()
 
 println(token.plainValue)
 ```
-!!! info For more details, please refer to the official Jenkins documentation [Jenkins Official Website](https://www.jenkins.io/)
+!!! quote
+    For more details, please refer to the official Jenkins documentation [Jenkins Official Website](https://www.jenkins.io/)
