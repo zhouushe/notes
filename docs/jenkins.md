@@ -160,5 +160,4 @@ user.save()
 
 println(token.plainValue)
 ```
-## :material-cake: Reference
-For more details, please refer to the official Jenkins documentation [Jenkins Official Website](https://www.jenkins.io/)
+!!! info For more details, please refer to the official Jenkins documentation [Jenkins Official Website](https://www.jenkins.io/)
