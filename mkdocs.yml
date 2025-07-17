@@ -6,10 +6,10 @@ site_description: Lang Ya Shuai Notes.
 repo_url: https://github.com/zhouushe/notes
 
 theme:
-  name: mkdocs  # The built-in "classic" theme (also called "mkdocs")
-  highlightjs: true  # Enable syntax highlighting
-  include_search_page: false  # Disable standalone search page
-  search_index_only: true  # Faster search (client-side only)
+  name: mkdocs
+  highlightjs: true
+  include_search_page: false
+  search_index_only: true
 
 nav:
   - Home: index.md
@@ -18,12 +18,13 @@ nav:
 
 markdown_extensions:
   - toc:
-      permalink: true  # Add link anchors to headers
-  - fenced_code  # Support GitHub-style code blocks
-  - tables  # Improved tables
-  - footnotes  # Footnote support
-  - meta  # Metadata support (YAML front-matter)
-  - attr_list  # Add classes/IDs to elements {: #id .class}
+      permalink: true
+  - pymdownx.superfences
+  - fenced_code
+  - tables
+  - footnotes
+  - meta
+  - attr_list
 
 plugins:
-  - search  # Built-in search (required for search functionality)
+  - search
