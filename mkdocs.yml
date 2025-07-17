@@ -27,7 +27,6 @@ markdown_extensions:
 
 plugins:
   - search  # Built-in search (required for search functionality)
-  - mkdocstrings  # Auto-generate docs from code (optional)
 
 extra_css:
   - css/custom.css  # Custom CSS overrides
