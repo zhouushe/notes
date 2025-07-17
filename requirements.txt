@@ -1,8 +1,9 @@
 mkdocs
+mkdocstrings
 mkdocs-material
-pymdown-extensions
-mkdocs-git-revision-date-localized-plugin
-mkdocs-awesome-nav
-mkdocs-minify-plugin
 mkdocs-glightbox
+pymdown-extensions
+mkdocs-awesome-nav
 mkdocs-kroki-plugin
+mkdocs-minify-plugin
+mkdocs-git-revision-date-localized-plugin
