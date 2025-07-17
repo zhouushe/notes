@@ -1,20 +1,36 @@
-site_name: Shuai Notes
-repo_url: https://github.com/zhouushe/notes
+site_name: Lang Ya Shuai Notes
 site_url: https://shuai-notes.vercel.app/
+site_author: Lang Ya Shuai
+site_description: Lang Ya Shuai Notes.
+
+repo_url: https://github.com/zhouushe/notes
+
 theme:
-  name: material
-  features:
-    - navigation.tabs
-    - content.code.copy
-  palette:
-    scheme: slate
-plugins:
-  - search
-markdown_extensions:
-  - toc:
-      permalink: true
-  - pymdownx.superfences
+  name: mkdocs  # The built-in "classic" theme (also called "mkdocs")
+  highlightjs: true  # Enable syntax highlighting
+  include_search_page: false  # Disable standalone search page
+  search_index_only: true  # Faster search (client-side only)
+
 nav:
   - Home: index.md
   - Notes:
       - Jenkins Notes: jenkins.md
+
+markdown_extensions:
+  - toc:
+      permalink: true  # Add link anchors to headers
+  - fenced_code  # Support GitHub-style code blocks
+  - tables  # Improved tables
+  - footnotes  # Footnote support
+  - meta  # Metadata support (YAML front-matter)
+  - attr_list  # Add classes/IDs to elements {: #id .class}
+
+plugins:
+  - search  # Built-in search (required for search functionality)
+  - mkdocstrings  # Auto-generate docs from code (optional)
+
+extra_css:
+  - css/custom.css  # Custom CSS overrides
+
+extra_javascript:
+  - js/custom.js  # Custom JS scripts
