@@ -2,6 +2,12 @@
 
 ## Jenkins Doc
 [https://www.jenkins.io/doc/](https://www.jenkins.io/doc/)
+[https://www.jenkins.io/doc/developer/](https://www.jenkins.io/doc/developer/)
+[https://devopscube.com/jenkins-architecture-explained/](https://devopscube.com/jenkins-architecture-explained/)
+
+## Jenkins Workflow
+![Jenkins Dataflow](images/jenkins/jenkins-dataflow.png)
+![Jenkins Architecture](images/jenkins/jenkins-architecture.gif)
 
 ### **Jenkins Code Samples**
 - Jenkins Get Env & Params
