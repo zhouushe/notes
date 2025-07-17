@@ -8,16 +8,16 @@ repo_url: https://github.com/zhouushe/notes
 theme:
   name: material
   palette:
-    - scheme: default
+    - scheme: slate
       primary: teal
       accent: amber
       toggle:
         icon: material/weather-sunny
         name: eye-protection
   features:
-    - content.code.annotate
     - navigation.tabs
     - navigation.top
+    - content.code.annotate
 
 nav:
   - Home: index.md
