@@ -6,10 +6,18 @@ site_description: Lang Ya Shuai Notes.
 repo_url: https://github.com/zhouushe/notes
 
 theme:
-  name: mkdocs
-  highlightjs: true
-  include_search_page: false
-  search_index_only: true
+  name: material
+  palette:
+    - scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: eye-protection
+  features:
+    - content.code.annotate
+    - navigation.tabs
+    - navigation.top
 
 nav:
   - Home: index.md
@@ -28,3 +36,6 @@ markdown_extensions:
 
 plugins:
   - search
+
+extra_css:
+  - css/custom.css
