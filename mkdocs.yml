@@ -1,0 +1,20 @@
+site_name: Shuai Notes
+repo_url: https://github.com/zhouushe/notes
+site_url: https://shuai-notes.vercel.app/
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - content.code.copy
+  palette:
+    scheme: slate
+plugins:
+  - search
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+nav:
+  - Home: index.md
+  - Notes:
+      - Daily Notes: daily-notes.md
