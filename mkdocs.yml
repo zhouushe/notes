@@ -27,9 +27,3 @@ markdown_extensions:
 
 plugins:
   - search  # Built-in search (required for search functionality)
-
-extra_css:
-  - css/custom.css  # Custom CSS overrides
-
-extra_javascript:
-  - js/custom.js  # Custom JS scripts
