@@ -17,4 +17,4 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Notes:
-      - Shuai Notes: notes.md
+      - Jenkins Notes: jenkins.md
