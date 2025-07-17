@@ -131,7 +131,7 @@ if (ldapRealm instanceof LDAPSecurityRealm) {
     println("LDAPSecurityRealm is not configured.")
 }
 ```
-```
+```groovy title="This is an example generate token"
 import hudson.model.User
 import jenkins.security.ApiTokenProperty
 import jenkins.security.apitoken.ApiTokenStore
