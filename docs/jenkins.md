@@ -16,6 +16,6 @@ for(computer in Jenkins.getInstance().getComputers()) {
     println(computer.getDisplayName())
     println(computer.getNode())
     println(computer.getDescription())
-  	println("--------------------------------")
+    println("--------------------------------")
 }
 ```
