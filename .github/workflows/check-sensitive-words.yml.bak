@@ -1,0 +1,22 @@
+name: Sensitive Words Check
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Code
+        uses: actions/checkout@v4
+
+      - name: Check Sensitive Words by Command
+        run: |
+          results=$(egrep -rif config/sensitive_words.txt docs 2>/dev/null)
+          if [[ ${results} ]]; then
+            echo "Found Sensitive Words!\n${results}"
+            exit 1
+          fi
+
+      - name: Check Sensitive Words by Python
+        run: |
+          python script/check_sensitive_words.py
