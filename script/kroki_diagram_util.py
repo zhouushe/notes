@@ -12,7 +12,7 @@ BASE_URL = 'https://kroki.exia.dev'
 @click.group()
 def cli():
     """
-    Encode and decode diagram files for use with Kroki diagramming service.
+    This utility can be used to encode and decode diagrams to/from the Kroki service.
 
     Usage examples:
 
