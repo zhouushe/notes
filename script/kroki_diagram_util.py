@@ -38,8 +38,7 @@ def encode_diagram(diagram_file, output):
     """Encode a diagram file to a URL-safe Base64 compressed string"""
     try:
         diagram_source = diagram_file.read_text(encoding='utf-8')
-        encoded_diagram = base64.urlsafe_b64encode(zlib.compress(diagram_source.encode('utf-8'), level=9)).decode(
-            'ascii')
+        encoded_diagram = base64.urlsafe_b64encode(zlib.compress(diagram_source.encode('utf-8'), level=9)).decode('ascii')
 
         if output:
             output.write_text(encoded_diagram, encoding='ascii')
