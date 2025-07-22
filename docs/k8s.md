@@ -133,7 +133,7 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
 - Wait for pods to be ready
 ```bash title="Wait for pods to be ready"
-kubectl get pods -n kube-system
+kubectl get pods -n kube-system --watch
 ```
 
 # Join Cluster (Worker Nodes)
