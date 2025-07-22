@@ -24,6 +24,12 @@ sudo swapoff -a
 sudo swapon --show
 ```
 
+- Enable IPv4 forward
+```bash title="Enable IPv4 forward"
+sudo sed -i 's/^#*net.ipv4.ip_forward=1/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+sudo sysctl -p
+```
+
 ## Install Container Runtime (containerd)
 - Install containerd
 ```bash title="Install containerd"
@@ -98,12 +104,6 @@ sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.2
 └── pki/                     # Directory for certificates and keys
 ```
 
-!!! error "[ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1"
-    ```bash title="Enable IPv4 forward"
-    sudo sed -i 's/^#*net.ipv4.ip_forward=1/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
-    sudo sysctl -p
-    ```
-
 ## Configure kubectl
 - Set up the admin configuration
 ```bash title="Set up the admin configuration"
@@ -135,5 +135,6 @@ sudo hostnamectl set-hostname k8s-worker1
 ## Join Cluster
 Run the `kubeadm join` command from the control-plane node’s `kubeadm init` output
 ```bash title="Join cluster"
-sudo kubeadm join <control-plane-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+# sudo kubeadm join <control-plane-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+sudo kubeadm join 10.227.224.235:6443 --token mckgmt.bls3e4rnpj8mtllm --discovery-token-ca-cert-hash sha256:468406b3769e708098b5290806c9b0ff3ce9620a2c358e729566acd6b0bbf932 --control-plane
 ```
