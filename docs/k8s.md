@@ -161,7 +161,7 @@ kubectl expose deployment nginx --port=80 --type=NodePort
 
 ```bash title="Relevant kubectl command"
 # Deploy nginx service
-kubectl expose deployment nginx --port=80 --type=NodePort --image=nginx
+kubectl expose deployment nginx --port=80 --type=NodePort --name=nginx
 
 # Show details of nginx service
 kubectl get service nginx
