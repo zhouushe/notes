@@ -175,15 +175,15 @@ kubectl get pods -l app=nginx
 # Show all nodes with details
 kubectl get nodes -o wide
 
-# Delete nginx service
-kubectl delete service nginx
-
 # Show nginx nodes with details
 kubectl get pods -l app=nginx -o wide
 
 # Show pod details of a specific name
 kubectl get pods -l app=nginx
 kubectl describe pod <pod-name>
+
+# Delete nginx service
+kubectl delete service nginx
 ```
 
 - Get the service details
