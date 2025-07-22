@@ -175,10 +175,15 @@ kubectl create deployment nginx --image=nginx --replicas=2
 ```bash title="Expose nginx service"
 kubectl expose deployment nginx --port=80 --type=NodePort
 ```
+- Test nginx service
+```bash title="Test nginx service"
+# Show nginx nodes with details
+kubectl get pods -l app=nginx -o wide
+```
 Access Nginx using any node’s IP and the assigned `NodePort`.
 
-## Verify Others
-```bash title="Other command"
+# K8S Command
+```bash title="K8S command"
 # Show details of all service
 kubectl get svc
 
@@ -206,4 +211,7 @@ kubectl get pods -n kube-system -l app=flannel
 
 # Restart kubelet
 sudo systemctl restart kubelet
+
+# Check kubelet logs
+journalctl -u kubelet -n 100 --no-pager
 ```
