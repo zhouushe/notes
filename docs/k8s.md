@@ -187,7 +187,7 @@ curl http://$NODE_IP:$NODE_PORT
 ```
 Access Nginx using any node’s IP and the assigned `NodePort`.
 
-# K8S Command
+# K8S Commands
 ```bash title="K8S command"
 # Lists all pods across all namespaces in a cluster
 kubectl get pods --all-namespaces
