@@ -184,6 +184,9 @@ Access Nginx using any node’s IP and the assigned `NodePort`.
 
 # K8S Command
 ```bash title="K8S command"
+# Lists all pods across all namespaces in a cluster
+kubectl get pods --all-namespaces
+
 # Show details of all service
 kubectl get svc
 
@@ -209,9 +212,16 @@ kubectl delete service nginx
 # Check flannel pods
 kubectl get pods -n kube-system -l app=flannel
 
+# Check flannel pod log
+kubectl get pods -n kube-system -l app=flannel
+kubectl logs -n kube-system <flannel-pod-name> -c kube-flannel
+
 # Restart kubelet
 sudo systemctl restart kubelet
 
 # Check kubelet logs
 journalctl -u kubelet -n 100 --no-pager
+
+# Reinstall CNI plugins
+sudo apt install -y containernetworking-plugins
 ```
