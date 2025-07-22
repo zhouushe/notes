@@ -121,11 +121,16 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 ## Install CNI Plugin (Flannel)
 - Apply the Flannel network
 ```bash title="Apply the Flannel network"
-# kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+# Reinstall CNI plugins if not installed
+sudo apt install -y containernetworking-plugins
 
+# kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
 curl https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml -o kube-flannel.yml
 sed -i 's/\("Network":\s*"\).*\(\/[0-9]*\)"/\110.227.0.0\2"/' kube-flannel.yml
 kubectl apply -f kube-flannel.yml
+
+# If Flannel continues to fail, switch to Calico
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
 
 - Wait for pods to be ready
@@ -221,7 +226,4 @@ sudo systemctl restart kubelet
 
 # Check kubelet logs
 journalctl -u kubelet -n 100 --no-pager
-
-# Reinstall CNI plugins
-sudo apt install -y containernetworking-plugins
 ```
