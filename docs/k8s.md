@@ -180,10 +180,16 @@ kubectl create deployment nginx --image=nginx --replicas=2
 ```bash title="Expose nginx service"
 kubectl expose deployment nginx --port=80 --type=NodePort
 ```
-- Test nginx service
+- Test nginx deployment service
 ```bash title="Test nginx service"
-# Show nginx nodes with details
-kubectl get pods -l app=nginx -o wide
+# Get NodePort (30000-32767)
+NODE_PORT=$(kubectl get service nginx -o jsonpath='{.spec.ports[0].nodePort}')
+
+# Get any NodeIP
+NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}')
+
+# Accessing using curl
+curl http://$NODE_IP:$NODE_PORT
 ```
 Access Nginx using any node’s IP and the assigned `NodePort`.
 
