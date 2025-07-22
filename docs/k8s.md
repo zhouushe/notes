@@ -83,11 +83,13 @@ hostnamectl set-hostname ""
 ```
 
 ## Initialize Cluster
-```bash title="Initialize the control-plane with `kubeadm`"
+- Initialize the control-plane with `kubeadm`
+```bash title="Initialize the control-plane with kubeadm"
 # sudo kubeadm init --pod-network-cidr=<cidr> --control-plane-endpoint=<control-plane-ip>
 sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.227.224.235
 ```
-```text title="`/etc/kubernetes/` Directory Structure"
+- `/etc/kubernetes/` Directory Structure
+```text title="/etc/kubernetes/ Directory Structure"
 /etc/kubernetes/
 ├── admin.conf               # Cluster configuration file with admin privileges
 ├── controller-manager.conf  # Configuration file for the controller manager
@@ -105,6 +107,7 @@ sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.2
     ```
 
 ## Configure kubectl
+- Set up the admin configuration
 ```bash title="Set up the admin configuration"
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -112,3 +115,11 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
 ## Install a CNI Plugin (Flannel)
+- Apply the Flannel network
+```bash title="Apply the Flannel network"
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+```
+- Wait for pods to be ready
+```bash title="Wait for pods to be ready"
+kubectl get pods -n kube-system
+```
