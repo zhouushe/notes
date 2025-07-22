@@ -118,6 +118,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 # kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
 
 curl https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml -o kube-flannel.yml
+sed -i 's/\("Network":\s*"\).*\(\/[0-9]*\)"/\110.227.0.0\2"/' kube-flannel.yml
 kubectl apply -f kube-flannel.yml
 ```
 
