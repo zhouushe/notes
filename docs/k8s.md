@@ -200,4 +200,10 @@ kubectl describe pod <pod-name>
 
 # Delete nginx service
 kubectl delete service nginx
+
+# Check flannel pods
+kubectl get pods -n kube-system -l app=flannel
+
+# Restart kubelet
+sudo systemctl restart kubelet
 ```
