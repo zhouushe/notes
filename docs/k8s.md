@@ -145,7 +145,7 @@ sudo hostnamectl set-hostname k8s-worker1
 Run the `kubeadm join` command from the control-plane node’s `kubeadm init` output.
 ```bash title="Join cluster"
 # sudo kubeadm join <control-plane-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
-sudo kubeadm join 10.227.224.235:6443 --token mckgmt.bls3e4rnpj8mtllm --discovery-token-ca-cert-hash sha256:468406b3769e708098b5290806c9b0ff3ce9620a2c358e729566acd6b0bbf932
+sudo kubeadm join 10.227.224.235:6443 --token 2ln8mt.1d91gun25pjdjvz8 --discovery-token-ca-cert-hash sha256:bb1de2c2e112b97d52870e4573bdc8d5caa75a4310f0e10697ddd5bf0827a928
 ```
 !!! note
     On the node that needs to be re - joined, execute the kubeadm reset command to reset the node's Kubernetes configuration. This command will stop the kubelet service, unmount the relevant directories, and remove Kubernetes - managed containers.
