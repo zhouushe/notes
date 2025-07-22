@@ -1,4 +1,4 @@
-# Prepare All Nodes
+# Prepare All Nodes (Master Node & Worker Nodes)
 !!! note
     Perform these steps on **all nodes** (`control-plane` and `workers`).
 
@@ -69,7 +69,7 @@ sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl  # Prevent auto-upgrades
 ```
 
-# Initialize the Control-Plane Node (Master Node)
+# Initialize Cluster (Master Node)
 !!! note
     Perform these steps **only on the control-plane node**.
 
@@ -112,17 +112,18 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-## Install a CNI Plugin (Flannel)
+## Install CNI Plugin (Flannel)
 - Apply the Flannel network
 ```bash title="Apply the Flannel network"
 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
 ```
+
 - Wait for pods to be ready
 ```bash title="Wait for pods to be ready"
 kubectl get pods -n kube-system
 ```
 
-# Join Worker Nodes
+# Join Cluster (Worker Nodes)
 !!! note
     Perform these steps on **each worker node**.
 
@@ -133,8 +134,32 @@ sudo hostnamectl set-hostname k8s-worker1
 ```
 
 ## Join Cluster
-Run the `kubeadm join` command from the control-plane node’s `kubeadm init` output
+Run the `kubeadm join` command from the control-plane node’s `kubeadm init` output.
 ```bash title="Join cluster"
 # sudo kubeadm join <control-plane-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
 sudo kubeadm join 10.227.224.235:6443 --token mckgmt.bls3e4rnpj8mtllm --discovery-token-ca-cert-hash sha256:468406b3769e708098b5290806c9b0ff3ce9620a2c358e729566acd6b0bbf932
+```
+
+# Verify Cluster (Master Node)
+!!! note
+    Perform these steps **only on the control-plane node**.
+
+## Verify Cluster
+On the **control-plane node**, check `node` status.
+```bash title="Verify cluster"
+kubectl get nodes
+```
+All nodes should appear in the `Ready` state.
+
+## Test Cluster
+- Deploy a sample `nginx` application
+```bash title="Deploy nginx"
+kubectl create deployment nginx --image=nginx
+kubectl scale deployment nginx --replicas=3
+kubectl expose deployment nginx --port=80 --type=NodePort
+```
+
+- Get the service details
+```bash title="Get details"
+kubectl get svc
 ```
