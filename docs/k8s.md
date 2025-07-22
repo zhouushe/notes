@@ -82,13 +82,22 @@ hostnamectl status
 hostnamectl set-hostname ""
 ```
 
-## Initialize the Cluster
-```bash title="Initialize the Cluster"
+## Initialize Cluster
+```bash title="Initialize the control-plane with `kubeadm`"
 # sudo kubeadm init --pod-network-cidr=<cidr> --control-plane-endpoint=<control-plane-ip>
 sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.227.224.235
 ```
+```text title="`/etc/kubernetes/` Directory Structure"
+/etc/kubernetes/
+├── admin.conf               # Cluster configuration file with admin privileges
+├── controller-manager.conf  # Configuration file for the controller manager
+├── kubelet.conf             # Configuration file for the kubelet component
+├── scheduler.conf           # Configuration file for the scheduler
+├── manifests/               # Directory for static Pod manifests
+└── pki/                     # Directory for certificates and keys
+```
 !!! error 
-    [ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1
+    <span style="color:red">[ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1</span>
 
     ```bash title="Enable IPv4 forward"
     sudo sed -i 's/^#*net.ipv4.ip_forward=1/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
@@ -96,3 +105,10 @@ sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.2
     ```
 
 ## Configure kubectl
+```bash title="Set up the admin configuration"
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+## Install a CNI Plugin (Flannel)
