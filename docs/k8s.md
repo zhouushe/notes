@@ -98,7 +98,7 @@ sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.2
 ├── manifests/               # Directory for static Pod manifests
 └── pki/                     # Directory for certificates and keys
 ```
-!!! error 
+!!! error "[ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1"
     <span style="color:red">[ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1</span>
 
     ```bash title="Enable IPv4 forward"
