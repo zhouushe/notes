@@ -1,3 +1,6 @@
+!!! note
+    Perform these steps on **all nodes** (`control-plane` and `workers`).
+
 # Prerequisites
 
 ## Update System and Install Dependencies
@@ -61,3 +64,33 @@ sudo apt update
 sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl  # Prevent auto-upgrades
 ```
+
+!!! note
+    Perform these steps **only on the control-plane node**.
+
+# Initialize the Control Plane (Master Node)
+
+## Set Hostname
+```bash title="Set Hostname"
+# Set a unique hostname
+sudo hostnamectl set-hostname k8s-control-plane
+
+# View hostname information
+hostnamectl status
+
+# Clear the hostname, the system will use the default value
+hostnamectl set-hostname ""
+```
+
+## Initialize the Cluster
+```bash title="Initialize the Cluster"
+# sudo kubeadm init --pod-network-cidr=<cidr> --control-plane-endpoint=<control-plane-ip>
+sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.227.224.235
+```
+!!! error [ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1
+    ```bash title="Enable IPv4 forward"
+    sudo sed -i 's/^#*net.ipv4.ip_forward=1/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+    sudo sysctl -p
+    ```
+
+## Configure kubectl
