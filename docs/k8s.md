@@ -173,7 +173,13 @@ kubectl create deployment nginx --image=nginx --replicas=2
 ```bash title="Expose nginx service"
 kubectl expose deployment nginx --port=80 --type=NodePort
 ```
+Access Nginx using any node’s IP and the assigned `NodePort`.
+
+## Verify Others
 ```bash title="Other command"
+# Show details of all service
+kubectl get svc
+
 # Show details of nginx service
 kubectl get service nginx
 
@@ -193,9 +199,3 @@ kubectl describe pod <pod-name>
 # Delete nginx service
 kubectl delete service nginx
 ```
-
-- Get the service details
-```bash title="Get details"
-kubectl get svc
-```
-Access Nginx using any node’s IP and the assigned `NodePort`.
