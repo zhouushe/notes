@@ -165,16 +165,15 @@ kubectl get nodes
 All nodes should appear in the `Ready` state.
 
 ## Test Cluster
-- Deploy a sample `nginx` application
-```bash title="Deploy nginx"
-kubectl create deployment nginx --image=nginx
-kubectl scale deployment nginx --replicas=3
+-  Deploy nginx application
+```bash title="Deploy nginx application"
+kubectl create deployment nginx --image=nginx --replicas=2
+```
+- Expose nginx service
+```bash title="Expose nginx service"
 kubectl expose deployment nginx --port=80 --type=NodePort
 ```
-```bash title="Relevant kubectl command"
-# Deploy nginx service
-kubectl expose deployment nginx --port=80 --type=NodePort --name=nginx
-
+```bash title="Other command"
 # Show details of nginx service
 kubectl get service nginx
 
