@@ -214,6 +214,9 @@ kubectl describe pod <pod-name>
 # Delete nginx service
 kubectl delete service nginx
 
+# Delete nginx deployment
+kubectl delete deployment nginx
+
 # Check flannel pods
 kubectl get pods -n kube-system -l app=flannel
 
