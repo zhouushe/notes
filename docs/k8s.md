@@ -115,7 +115,10 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ## Install CNI Plugin (Flannel)
 - Apply the Flannel network
 ```bash title="Apply the Flannel network"
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+# kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+
+curl https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml -o kube-flannel.yml
+kubectl apply -f kube-flannel.yml
 ```
 
 - Wait for pods to be ready
