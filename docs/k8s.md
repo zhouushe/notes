@@ -158,7 +158,6 @@ kubectl create deployment nginx --image=nginx
 kubectl scale deployment nginx --replicas=3
 kubectl expose deployment nginx --port=80 --type=NodePort
 ```
-
 ```bash title="Relevant kubectl command"
 # Deploy nginx service
 kubectl expose deployment nginx --port=80 --type=NodePort --name=nginx
@@ -174,6 +173,9 @@ kubectl get nodes -o wide
 
 # Delete nginx service
 kubectl delete service nginx
+
+# Show nginx nodes with details
+kubectl get pods -l app=nginx -o wide
 
 # Show pod details of a specific name
 kubectl get pods -l app=nginx
