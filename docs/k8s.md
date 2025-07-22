@@ -88,7 +88,7 @@ hostnamectl set-hostname ""
 # sudo kubeadm init --pod-network-cidr=<cidr> --control-plane-endpoint=<control-plane-ip>
 sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.227.224.235
 ```
-- `/etc/kubernetes/` Directory Structure
+- `/etc/kubernetes/` directory structure
 ```text title="/etc/kubernetes/ Directory Structure"
 /etc/kubernetes/
 ├── admin.conf               # Cluster configuration file with admin privileges
