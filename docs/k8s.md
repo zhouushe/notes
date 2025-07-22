@@ -1,6 +1,6 @@
 # Prepare All Nodes (Master Node & Worker Nodes)
-!!! note
-    Perform these steps on **all nodes** (`control-plane` and `workers`).
+
+Perform these steps on **all nodes** (`control-plane` and `workers`).
 
 ## Prerequisites
 - Update System and Install Dependencies
@@ -70,8 +70,8 @@ sudo apt-mark hold kubelet kubeadm kubectl  # Prevent auto-upgrades
 ```
 
 # Initialize Cluster (Master Node)
-!!! note
-    Perform these steps **only on the control-plane node**.
+
+Perform these steps **only on the control-plane node**.
 
 ## Set Hostname
 Set unique hostnames (e.g., `k8s-control-plane`)
@@ -139,8 +139,8 @@ kubectl get pods -n kube-system
 ```
 
 # Join Cluster (Worker Nodes)
-!!! note
-    Perform these steps on **each worker node**.
+
+Perform these steps on **each worker node**.
 
 ## Set Hostname
 Set unique hostnames (e.g., `k8s-worker1`, `k8s-worker2`)
@@ -161,8 +161,8 @@ sudo kubeadm join 10.227.224.235:6443 --token 2ln8mt.1d91gun25pjdjvz8 --discover
     ```
 
 # Verify Cluster (Master Node)
-!!! note
-    Perform these steps **only on the control-plane node**.
+
+Perform these steps **only on the control-plane node**.
 
 ## Verify Cluster
 On the **control-plane node**, check `node` status.
@@ -194,6 +194,7 @@ curl http://$NODE_IP:$NODE_PORT
 Access Nginx using any node’s IP and the assigned `NodePort`.
 
 # K8S Command
+
 ```bash title="K8S command"
 # Lists all pods across all namespaces in a cluster
 kubectl get pods --all-namespaces
