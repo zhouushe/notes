@@ -163,3 +163,4 @@ kubectl expose deployment nginx --port=80 --type=NodePort
 ```bash title="Get details"
 kubectl get svc
 ```
+Access Nginx using any node’s IP and the assigned `NodePort`.
