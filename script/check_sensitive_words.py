@@ -1,4 +1,5 @@
 import os
+import re
 
 SENSITIVE_WORDS_FILE = 'config/sensitive_words.txt'
 DOCS_DIR = 'docs/'
@@ -22,7 +23,7 @@ def check_sensitive_words(file_path, sensitive_words):
         return False
 
     for word in sensitive_words:
-        if word in content:
+        if re.search(rf'\b{word}\b', content, re.IGNORECASE | re.MULTILINE):
             print(f'❌ Found sensitive words [{word}] in {file_path}')
             return False
 
