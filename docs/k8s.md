@@ -243,6 +243,9 @@ kubectl get pods -n kube-system -l app=flannel
 kubectl get pods -n kube-system -l app=flannel
 kubectl logs -n kube-system <flannel-pod-name> -c kube-flannel
 
+# Check the current status of the containerd service using systemd
+sudo systemctl status containerd
+
 # Restart kubelet
 sudo systemctl restart kubelet
 
