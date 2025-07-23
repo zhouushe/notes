@@ -1,7 +1,10 @@
-# Prepare All Nodes (Master Node & Worker Nodes)
+# How to set up K8S control-plane (master) and worker nodes
+*Setting up a Kubernetes (K8S) cluster involves configuring `control-plane (master)` and `worker` nodes. Below is a step-by-step guide to set up a basic Kubernetes cluster using `kubeadm`.*
+
+## Prepare All Nodes (Master Node & Worker Nodes)
 Perform these steps on **all nodes** (`control-plane` and `workers`).
 
-## Prerequisites
+### Prerequisites
 - Update System and Install Dependencies
 ```bash title="Update the system and install required tools"
 sudo apt-get update
@@ -29,7 +32,7 @@ sudo sed -i 's/^#*net.ipv4.ip_forward=1/net.ipv4.ip_forward = 1/' /etc/sysctl.co
 sudo sysctl -p
 ```
 
-## Install Container Runtime (containerd)
+### Install Container Runtime (containerd)
 - Install containerd
 ```bash title="Install containerd"
 # Install containerd
@@ -54,7 +57,7 @@ sudo systemctl restart containerd
 sudo systemctl enable containerd
 ```
 
-## Install Kubernetes Components
+### Install Kubernetes Components
 - Add Kubernetes APT repository
 ```bash title="Add Kubernetes APT repository"
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
@@ -68,10 +71,10 @@ sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl  # Prevent auto-upgrades
 ```
 
-# Initialize Cluster (Master Node)
+## Initialize Cluster (Master Node)
 Perform these steps **only on the control-plane node**.
 
-## Set Hostname
+### Set Hostname
 Set unique hostnames (e.g., `k8s-control-plane`)
 ```bash title="Set Hostname"
 # Set a unique hostname
@@ -84,7 +87,7 @@ hostnamectl status
 hostnamectl set-hostname ""
 ```
 
-## Initialize Cluster
+### Initialize Cluster
 - Initialize the control-plane with `kubeadm`
 ```bash title="Initialize the control-plane with kubeadm"
 # sudo kubeadm init --pod-network-cidr=<cidr> --control-plane-endpoint=<control-plane-ip>
@@ -106,7 +109,7 @@ sudo kubeadm init --pod-network-cidr=10.227.0.0/16 --control-plane-endpoint=10.2
 └── pki/                     # Directory for certificates and keys
 ```
 
-## Configure kubectl
+### Configure kubectl
 - Set up the admin configuration
 ```bash title="Set up the admin configuration"
 mkdir -p $HOME/.kube
@@ -116,7 +119,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 export KUBECONFIG=/etc/kubernetes/admin.conf
 ```
 
-## Install CNI Plugin (Calico)
+### Install CNI Plugin (Calico)
 - Apply CNI network
 ```bash title="Apply CNI network"
 # Option#1: Apply Calico network
@@ -134,16 +137,16 @@ kubectl apply -f kube-flannel.yml
 kubectl get pods -n kube-system --watch
 ```
 
-# Join Cluster (Worker Nodes)
+## Join Cluster (Worker Nodes)
 Perform these steps on **each worker node**.
 
-## Set Hostname
+### Set Hostname
 Set unique hostnames (e.g., `k8s-worker1`, `k8s-worker2`)
 ```bash title="Set unique hostname"
 sudo hostnamectl set-hostname k8s-worker1
 ```
 
-## Join Cluster
+### Join Cluster
 Run the `kubeadm join` command from the control-plane node’s `kubeadm init` output.
 ```bash title="Join cluster"
 # sudo kubeadm join <control-plane-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
@@ -155,17 +158,17 @@ sudo kubeadm join 10.227.xxx.xxx:6443 --token 2ln8mt.1d91gun25pjdjvz8 --discover
     sudo kubeadm reset
     ```
 
-# Verify Cluster (Master Node)
+## Verify Cluster (Master Node)
 Perform these steps **only on the control-plane node**.
 
-## Verify Cluster
+### Verify Cluster
 On the **control-plane node**, check `node` status.
 ```bash title="Verify cluster"
 kubectl get nodes
 ```
 All nodes should appear in the `Ready` state.
 
-## Test Cluster
+### Test Cluster
 -  Deploy nginx application
 ```bash title="Deploy nginx application"
 kubectl create deployment nginx --image=nginx --replicas=2
@@ -187,7 +190,7 @@ curl http://$NODE_IP:$NODE_PORT
 ```
 Access Nginx using any node’s IP and the assigned `NodePort`.
 
-# K8S Commands
+## K8S Commands
 ```bash title="K8S command"
 # Lists all pods across all namespaces in a cluster
 kubectl get pods --all-namespaces
