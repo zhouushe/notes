@@ -20,13 +20,13 @@ theme:
         icon: material/lightbulb
         name: Switch Light Mode
   features:
-	- navigation.instant    # Enables page switching without refreshing
-	- navigation.tabs       # Uses tab-style navigation
-	- navigation.sections   # Groups navigation items into sections
-	- navigation.expand     # Expands all navigation levels
-	- navigation.top        # Displays a back-to-top button
-	- search.highlight      # Highlights matching text in search results
-	- content.code.annotate # Annotates code blocks in content
+    - navigation.instant    # Enables page switching without refreshing
+    - navigation.tabs       # Uses tab-style navigation
+    - navigation.sections   # Groups navigation items into sections
+    - navigation.expand     # Expands all navigation levels
+    - navigation.top        # Displays a back-to-top button
+    - search.highlight      # Highlights matching text in search results
+    - content.code.annotate # Annotates code blocks in content
   extra:
     social:
       - icon: fontawesome/brands/github
