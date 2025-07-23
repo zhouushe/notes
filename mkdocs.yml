@@ -1,43 +1,33 @@
-site_name: Lang Ya Shuai Notes
-site_url: https://shuai-notes.vercel.app/
-site_author: Lang Ya Shuai
-site_description: Lang Ya Shuai Notes.
-
-repo_url: https://github.com/zhouushe/notes
-
 theme:
   name: material
-  palette:
-    - scheme: slate
-      primary: teal
-      accent: amber
-      toggle:
-        icon: material/weather-sunny
-        name: eye-protection
   features:
     - navigation.tabs
-    - navigation.top
-    - content.code.annotate
-
-nav:
-  - Home: index.md
-  - Notes:
-      - Jenkins Notes: jenkins.md
-      - K8S Notes: k8s.md
-
-markdown_extensions:
-  - toc:
-      permalink: true
-  - admonition
-  - pymdownx.superfences
-  - fenced_code
-  - tables
-  - footnotes
-  - meta
-  - attr_list
-
-plugins:
-  - search
-
-extra_css:
-  - css/custom.css
+    - search.suggest
+    - search.highlight
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      primary: teal
+      accent: lime
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch Dark Mode
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: teal
+      accent: lime
+      toggle:
+        icon: material/lightbulb
+        name: Switch Light Mode
+  features:
+	- navigation.instant    # Enables page switching without refreshing
+	- navigation.tabs       # Uses tab-style navigation
+	- navigation.sections   # Groups navigation items into sections
+	- navigation.expand     # Expands all navigation levels
+	- navigation.top        # Displays a back-to-top button
+	- search.highlight      # Highlights matching text in search results
+	- content.code.annotate # Annotates code blocks in content
+  extra:
+    social:
+      - icon: fontawesome/brands/github
+        link: https://github.com/zhouushe/notes
