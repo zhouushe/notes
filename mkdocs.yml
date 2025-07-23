@@ -41,9 +41,8 @@ theme:
 
 nav:
   - Home: index.md
-  - Notes:
-      - Jenkins Notes: jenkins.md
-      - K8S Notes: k8s.md
+  - Jenkins Notes: jenkins.md
+  - K8S Notes: k8s.md
 
 markdown_extensions:
   - toc:
