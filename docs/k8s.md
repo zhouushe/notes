@@ -29,6 +29,7 @@ sudo swapon --show
 - Enable IPv4 forward
 ```bash title="Enable IPv4 forward"
 sudo sed -i 's/^#*net.ipv4.ip_forward=1/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+
 sudo sysctl -p
 ```
 
@@ -43,6 +44,7 @@ sudo apt install -y containerd
 - Configure containerd
 ```bash title="Configure containerd"
 sudo mkdir -p /etc/containerd
+
 containerd config default | sudo tee /etc/containerd/config.toml
 ```
 
@@ -61,6 +63,7 @@ sudo systemctl enable containerd
 - Add Kubernetes APT repository
 ```bash title="Add Kubernetes APT repository"
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
@@ -184,10 +187,12 @@ All nodes should appear in the `Ready` state.
 ```bash title="Deploy nginx application"
 kubectl create deployment nginx --image=nginx --replicas=2
 ```
+
 - Expose nginx service
 ```bash title="Expose nginx service"
 kubectl expose deployment nginx --port=80 --type=NodePort
 ```
+
 - Test nginx deployment service
 ```bash title="Test nginx service"
 # Get NodePort (30000-32767)
@@ -199,7 +204,7 @@ NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}
 # Accessing using curl
 curl http://$NODE_IP:$NODE_PORT
 ```
-Access Nginx using any node’s IP and the assigned `NodePort`.
+Access Nginx using any `NodeIP` and the assigned `NodePort`.
 
 ## K8S Commands
 ```bash title="K8S command"
