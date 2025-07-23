@@ -27,13 +27,14 @@ theme:
         icon: material/lightbulb
         name: Switch Light Mode
   features:
-    - navigation.instant    # Enables page switching without refreshing
-    - navigation.tabs       # Uses tab-style navigation
-    - navigation.sections   # Groups navigation items into sections
-    - navigation.expand     # Expands all navigation levels
-    - navigation.top        # Displays a back-to-top button
-    - search.highlight      # Highlights matching text in search results
-    - content.code.annotate # Annotates code blocks in content
+    - navigation.instant    # Enable page switching without refreshing
+    - navigation.tabs       # Use tab-style navigation
+    - navigation.sections   # Group navigation items into sections
+    - navigation.expand     # Expand all navigation levels
+    - navigation.top        # Display a back-to-top button
+    - search.highlight      # Highlight matching text in search results
+    - content.code.annotate # Annotate code blocks in content
+    - content.code.copy     # Add copy button
   extra:
     social:
       - icon: fontawesome/brands/github
@@ -48,12 +49,17 @@ markdown_extensions:
   - toc:
       permalink: true
   - admonition
-  - pymdownx.superfences
   - fenced_code
   - tables
   - footnotes
   - meta
   - attr_list
+  - pymdownx.highlight:
+      linenums: true            # Enable line numbers
+      anchor_linenums: true     # Make line numbers clickable
+      line_spans: "__LINE__"    # Support line range markers
+      pygments_lang_class: true # Add language class name
+  - pymdownx.superfences
 
 plugins:
   - search
