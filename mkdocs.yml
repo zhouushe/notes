@@ -1,3 +1,10 @@
+site_name: Lang Ya Shuai Notes
+site_url: https://shuai-notes.vercel.app/
+site_author: Lang Ya Shuai
+site_description: Lang Ya Shuai Notes.
+
+repo_url: https://github.com/zhouushe/notes
+
 theme:
   name: material
   features:
@@ -31,3 +38,26 @@ theme:
     social:
       - icon: fontawesome/brands/github
         link: https://github.com/zhouushe/notes
+
+nav:
+  - Home: index.md
+  - Notes:
+      - Jenkins Notes: jenkins.md
+      - K8S Notes: k8s.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.superfences
+  - fenced_code
+  - tables
+  - footnotes
+  - meta
+  - attr_list
+
+plugins:
+  - search
+
+extra_css:
+  - css/custom.css
