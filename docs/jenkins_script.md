@@ -1,4 +1,4 @@
-# Jenkins Notes
+# Jenkins Script
 
 ## Jenkins Doc
 - [https://www.jenkins.io/doc/](https://www.jenkins.io/doc/)
