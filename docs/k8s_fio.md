@@ -4,16 +4,24 @@
 ```dockerfile title="FIO Dockerfile"
 FROM ubuntu:latest
 
-# Install necessary packages including fio and libaio
-RUN apt-get update && \
-    apt-get install -y fio libaio1 && \
-    apt-get clean && \
+# Set the repository source explicitly
+RUN echo "deb http://archive.ubuntu.com/ubuntu noble main universe" > /etc/apt/sources.list && \
+    echo "deb http://security.ubuntu.com/ubuntu noble-security main universe" >> /etc/apt/sources.list
+
+# Update package lists
+RUN apt-get update
+
+# Install fio and libaio1
+RUN apt-get install -y fio libaio1
+
+# Clean up to reduce image size
+RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Set the working directory for fio tests
-WORKDIR /test
+WORKDIR /tmp
 
-# Define the default command to run fio (can be overridden in pod spec)
+# Define the default command to run fio
 CMD ["fio"]
 ```
 
