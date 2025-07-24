@@ -46,6 +46,7 @@ nav:
       - Jenkins Script: jenkins_script.md
   - K8S:
       - K8S Setup: k8s_setup.md
+      - K8S Command: k8s_command.md
       - K8S FIO: k8s_fio.md
 
 markdown_extensions:
