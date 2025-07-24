@@ -2,9 +2,6 @@
 - Use an official or community-provided fio image (e.g., `ubuntu:fio`, ensuring fio is pre-installed in the image).
 - Build a custom image containing fio.
 ```dockerfile title="FIO Dockerfile"
-FROM ubuntu:24.04
-
-# Install necessary packages including fio and libaio
 FROM ubuntu:latest
 
 # Install necessary packages including fio and libaio
