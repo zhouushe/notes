@@ -1,4 +1,4 @@
-# How to set up K8S control-plane (master) and worker nodes
+# Setup K8S control-plane (master) and worker nodes
 *Setting up a Kubernetes (K8S) cluster involves configuring `control-plane (master)` and `worker` nodes. Below is a step-by-step guide to set up a basic Kubernetes cluster using `kubeadm`.*
 
 ## Prepare All Nodes (Master & Worker Nodes)
