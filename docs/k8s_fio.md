@@ -33,9 +33,14 @@ kubectl apply -f fio-test.yaml
 ```
 
 - View Logs
+*View results (such as IOPS, bandwidth, etc) after test complete.*
 ```bash title="View test results"
-# View results (such as IOPS, bandwidth, etc) after test complete
 kubectl logs -f fio-test
+```
+
+- Describe Pod
+```bash title="Describe pod details"
+kubectl describe pod fio-test
 ```
 
 ## Clean Up
