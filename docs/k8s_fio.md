@@ -5,20 +5,23 @@
 FROM ubuntu:24.04
 
 # Install necessary packages including fio and libaio
+FROM ubuntu:latest
+
+# Install necessary packages including fio and libaio
 RUN apt-get update && \
     apt-get install -y fio libaio1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Set the working directory for fio tests
-WORKDIR /tmp
+WORKDIR /test
 
 # Define the default command to run fio (can be overridden in pod spec)
 CMD ["fio"]
 ```
 
 ```bash title="Build FIO Docker image"
-docker build -t ubuntu:fio -f dockerfile_fio .
+docker build -t ubuntu:fio -f fio_dockerfile .
 ```
 
 ## Create fio-test.yaml
