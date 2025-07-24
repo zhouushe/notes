@@ -37,3 +37,9 @@ kubectl apply -f fio-test.yaml
 # View results (such as IOPS, bandwidth, etc) after test complete
 kubectl logs -f fio-test
 ```
+
+## Clean Up
+- Delete Pod
+```bash title="Delete pod after test complete"
+kubectl delete pod fio-test
+```
