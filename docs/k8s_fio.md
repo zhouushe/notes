@@ -1,6 +1,25 @@
 ## Prepare fio image
 - Use an official or community-provided fio image (e.g., `ubuntu:fio`, ensuring fio is pre-installed in the image).
 - Build a custom image containing fio.
+```dockerfile title="FIO Dockerfile"
+FROM ubuntu:24.04
+
+# Install necessary packages including fio and libaio
+RUN apt-get update && \
+    apt-get install -y fio libaio1 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the working directory for fio tests
+WORKDIR /tmp
+
+# Define the default command to run fio (can be overridden in pod spec)
+CMD ["fio"]
+```
+
+```bash title="Build FIO Docker image"
+docker build -t ubuntu:fio -f dockerfile_fio .
+```
 
 ## Create fio-test.yaml
 *To test persistent storage performance, add volumes and volumeMounts to the Pod configuration, and mount the test directory to a Persistent Volume Claim (PVC).*
