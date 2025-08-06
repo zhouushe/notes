@@ -2,31 +2,21 @@
 - Use an official or community-provided fio image (e.g., `ubuntu:fio`, ensuring fio is pre-installed in the image).
 - Build a custom image containing fio.
 ```dockerfile title="FIO Dockerfile"
-FROM ubuntu:latest
+# Use Alpine Linux as the base image
+FROM alpine:latest
 
-# Set the repository source explicitly
-RUN echo "deb http://archive.ubuntu.com/ubuntu noble main universe" > /etc/apt/sources.list && \
-    echo "deb http://security.ubuntu.com/ubuntu noble-security main universe" >> /etc/apt/sources.list
+# Install dependencies and FIO
+RUN apk add --no-cache fio
 
-# Update package lists
-RUN apt-get update
-
-# Install fio and libaio1
-RUN apt-get install -y fio libaio1
-
-# Clean up to reduce image size
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Set the working directory for fio tests
-WORKDIR /tmp
+# Set working directory
+WORKDIR /data
 
 # Define the default command to run fio
 CMD ["fio"]
 ```
 
 ```bash title="Build FIO Docker image"
-docker build -t ubuntu:fio -f fio_dockerfile .
+docker build -t alpine:fio -f fio_dockerfile .
 ```
 
 ## Create fio-test.yaml
@@ -39,7 +29,7 @@ metadata:
 spec:
   containers:
   - name: fio-container
-    image: ubuntu:fio
+    image: alpine:fio
     command: ["fio"]
     args:
       - "--name=test"        # Specifies the name of the test
