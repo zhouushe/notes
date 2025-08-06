@@ -3,7 +3,7 @@ site_url: https://shuai-notes.vercel.app/
 site_author: Lang Ya Shuai
 site_description: Lang Ya Shuai Notes.
 
-repo_url: https://github.com/zhouushe/notes
+# repo_url: https://github.com/zhouushe/notes
 
 theme:
   name: material
