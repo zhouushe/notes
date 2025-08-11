@@ -35,6 +35,7 @@ spec:
   containers:
   - name: fio-container
     image: alpine:fio
+    imagePullPolicy: Never
     command: ["fio"]
     args:
       - "--name=test"        # Specifies the name of the test
