@@ -161,13 +161,13 @@ kubectl get pods -w
 ```
 
 ## View FIO Log
-- View FIO Client Log
-```bash title="View client logs"
-kubectl logs -f job/fio-client
-```
 - View FIO Server Log
 ```bash title="View server logs"
 kubectl logs -f deployment/fio-server
+```
+- View FIO Client Log
+```bash title="View client logs"
+kubectl logs -f job/fio-client
 ```
 
 ## Retrieve Results
