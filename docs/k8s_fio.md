@@ -19,6 +19,10 @@ CMD ["fio"]
 docker build -t alpine:fio -f fio_dockerfile .
 ```
 
+```bash title="Verify FIO Docker image"
+docker run -it --rm --network=host alpine:fio fio --version
+```
+
 ## Create fio-test.yaml
 *To test persistent storage performance, add volumes and volumeMounts to the Pod configuration, and mount the test directory to a Persistent Volume Claim (PVC).*
 ```yaml title="fio-test.yaml"
