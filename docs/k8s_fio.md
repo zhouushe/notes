@@ -158,6 +158,15 @@ kubectl logs -f job/fio-client
 kubectl logs -f deployment/fio-server
 ```
 
+## Retrieve Results
+```bash title="Retrieve results"
+# Get detailed JSON output
+kubectl logs job/fio-client > fio-results.json
+
+# Parse results
+kubectl logs job/fio-client | jq '.jobs[] | {jobname: .jobname, read: .read, write: .write}'
+```
+
 ## Clean Up
 - Delete Client
 ```bash title="Delete client"
