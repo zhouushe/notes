@@ -25,10 +25,22 @@ docker run -it --rm --network=host alpine:fio fio --version
 
 - Ensure k8s nodes can access local image
 ```bash title="Use local registry for multi-node clusters"
+# Run a Docker registry container in detached mode
+# -d: Runs the container in the background (detached mode)
+# -p 5000:5000: Maps port 5000 on the host to port 5000 in the container, allowing access to the registry
+# --restart=always: Automatically restarts the container if it stops or the host reboots
+# --name registry: Names the container "registry" for easy reference
+# registry:2: Uses the official Docker registry image (version 2)
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
+# Tag the local alpine:fio image for pushing to the local registry
+# alpine:fio - The source image name (built locally on your machine)
+# localhost:5000/alpine-fio - The new tag, indicating the image will be pushed to the local registry at localhost:5000
 docker tag alpine:fio localhost:5000/alpine-fio
 
+# Push the tagged image to the local registry
+# localhost:5000/alpine-fio: The target registry and image name
+# This uploads the image to the registry running at localhost:5000, making it accessible to Kubernetes nodes
 docker push localhost:5000/alpine-fio
 ```
 
