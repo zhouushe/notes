@@ -19,11 +19,11 @@ CMD ["fio"]
 ```
 
 ```bash title="Build FIO Docker image"
-docker build -t alpine:fio -f fio_dockerfile .
+docker build -t alpine-fio -f fio_dockerfile .
 ```
 
 ```bash title="Verify FIO Docker image"
-docker run -it --rm --network=host alpine:fio fio --version
+docker run -it --rm --network=host alpine-fio fio --version
 ```
 
 - Ensure k8s nodes can access local image
@@ -36,10 +36,10 @@ docker run -it --rm --network=host alpine:fio fio --version
 # registry:2: Uses the official Docker registry image (version 2)
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
-# Tag the local alpine:fio image for pushing to the local registry
-# alpine:fio - The source image name (built locally on your machine)
+# Tag the local alpine-fio image for pushing to the local registry
+# alpine-fio - The source image name (built locally on your machine)
 # localhost:5000/alpine-fio - The new tag, indicating the image will be pushed to the local registry at localhost:5000
-docker tag alpine:fio localhost:5000/alpine-fio
+docker tag alpine-fio localhost:5000/alpine-fio
 
 # Push the tagged image to the local registry
 # localhost:5000/alpine-fio: The target registry and image name
