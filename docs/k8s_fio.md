@@ -164,6 +164,8 @@ kubectl get pods -w
 - View FIO Server Log
 ```bash title="View server logs"
 kubectl logs -f deployment/fio-server
+
+kubectl describe pod -l app=fio-server
 ```
 - View FIO Client Log
 ```bash title="View client logs"
