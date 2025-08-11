@@ -187,5 +187,4 @@ kubectl delete job fio-client -n default
 - Delete Server
 ```bash title="Delete server"
 kubectl delete deployment fio-server -n default
-kubectl delete svc fio-server-service -n default
 ```
