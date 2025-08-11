@@ -9,7 +9,7 @@ FROM alpine:latest
 RUN apk add --no-cache fio
 
 # Set FIO working directory
-WORKDIR /fio-data
+WORKDIR /data
 
 # Expose FIO server port (default 8765)
 EXPOSE 8765
@@ -47,61 +47,123 @@ docker tag alpine:fio localhost:5000/alpine-fio
 docker push localhost:5000/alpine-fio
 ```
 
-## Create fio-test.yaml
-*To test persistent storage performance, add volumes and volumeMounts to the Pod configuration, and mount the test directory to a Persistent Volume Claim (PVC).*
-```yaml title="fio-test.yaml"
-apiVersion: v1
-kind: Pod
+## Create fio-server.yaml
+```yaml title="fio-client.yaml"
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: fio-test
-  namespace: default
-  labels:
-    app: fio-benchmark
+  name: fio-server
 spec:
-  containers:
-  - name: fio-container
-    image: localhost:5000/alpine-fio
-    imagePullPolicy: Always
-    command: ["fio"]
-    args:
-      - "--name=test"        # Specifies the name of the test
-      - "--ioengine=libaio"  # Sets the I/O engine to libaio (Linux native asynchronous I/O)
-      - "--rw=read"          # I/O mode: sequential read (other options: write, randread, randwrite, etc.)
-      - "--bs=4k"            # Block size for I/O operations (4 KiB in this case)
-      - "--size=1G"          # Total size of the test file (1 GiB in this case)
-      - "--numjobs=1"        # Number of parallel jobs/processes (1 job in this case)
-      - "--runtime=60"       # Test runtime in seconds (60 seconds in this case)
-      - "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
-    volumeMounts:
-      - name: fio-volume
-        mountPath: /fio-data
-  volumes:
-    - name: fio-volume
-      hostPath:
-        path: /mnt/fio-test           # Test this storage path
-        type: DirectoryOrCreate       # Creates if doesn't exist
-  restartPolicy: Never                # Don't restart after completion
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fio-server
+  template:
+    metadata:
+      labels:
+        app: fio-server
+    spec:
+      containers:
+      - name: fio-server
+        image: localhost:5000/alpine-fio
+        command: ["fio"]
+        args: ["--server", "--port=8765"]
+        ports:
+        - containerPort: 8765
+        volumeMounts:
+        - name: test-volume
+          mountPath: /test
+      volumes:
+      - name: test-volume
+        hostPath:
+          path: /mnt/fio-test
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fio-server
+spec:
+  selector:
+    app: fio-server
+  ports:
+    - protocol: TCP
+      port: 8765
+      targetPort: 8765
 ```
 
-## Deploy Pod & Run Test
-- Deploy Pod
-```bash title="Deploy pod and run test"
-kubectl apply -f fio-test.yaml
+## Create fio-client.yaml
+*To test persistent storage performance, add volumes and volumeMounts to the Pod configuration, and mount the test directory to a Persistent Volume Claim (PVC).*
+```yaml title="fio-client.yaml"
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fio-client
+spec:
+  template:
+    spec:
+      containers:
+      - name: fio-client
+	    image: localhost:5000/alpine-fio
+		imagePullPolicy: Always
+		command: ["fio"]
+		args:
+		  - "--name=test"        # Specifies the name of the test
+		  - "--ioengine=libaio"  # Sets the I/O engine to libaio (Linux native asynchronous I/O)
+		  - "--rw=read"          # I/O mode: sequential read (other options: write, randread, randwrite, etc.)
+		  - "--bs=4k"            # Block size for I/O operations (4 KiB in this case)
+		  - "--size=1G"          # Total size of the test file (1 GiB in this case)
+		  - "--numjobs=1"        # Number of parallel jobs/processes (1 job in this case)
+		  - "--runtime=60"       # Test runtime in seconds (60 seconds in this case)
+		  - "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
+		volumeMounts:
+		- name: fio-volume
+			mountPath: /test
+	  volumes:
+		- name: fio-volume
+		  hostPath:
+			path: /mnt/fio-test      # Test this storage path
+			type: DirectoryOrCreate  # Creates if doesn't exist
+	  restartPolicy: Never           # Don't restart after completion
+  backoffLimit: 0
 ```
 
-- View Logs
-*View results (such as IOPS, bandwidth, etc) after test complete.*
-```bash title="View test results"
-kubectl logs -f fio-test
+## Deploy FIO Server
+```bash title="Deploy fio server"
+kubectl apply -f fio-server.yaml
 ```
 
-- Describe Pod
-```bash title="Describe pod details"
-kubectl describe pod fio-test
+## Wait for FIO Server Ready
+```bash title="Wait for FIO server to be ready"
+kubectl wait --for=condition=available deployment/fio-server --timeout=300s
+```
+
+## Deploy FIO Client
+```bash title="Deploy fio client"
+kubectl apply -f fio-client.yaml
+```
+
+## Monitor FIO Progress
+```bash title="Monitor FIO server and client progress"
+kubectl get pods -w
+```
+
+## View FIO Log
+- View FIO Client Log
+```bash title="View client logs"
+kubectl logs -f job/fio-client
+```
+- View FIO Server Log
+```bash title="View server logs"
+kubectl logs -f deployment/fio-server
 ```
 
 ## Clean Up
-- Delete Pod
-```bash title="Delete pod after test complete"
-kubectl delete pod fio-test
+- Delete Client
+```bash title="Delete client"
+
+```
+- Delete Server
+```bash title="Delete server"
+
 ```
