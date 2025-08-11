@@ -15,7 +15,7 @@ WORKDIR /fio-data
 EXPOSE 8765
 
 # Define the default command to run fio
-CMD ["fio", "--server"]
+CMD ["fio"]
 ```
 
 ```bash title="Build FIO Docker image"
