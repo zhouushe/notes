@@ -74,7 +74,7 @@ spec:
         - containerPort: 8765
           name: fio-port
         volumeMounts:
-        - name: test-mount
+        - name: test-volume
           mountPath: /test
         securityContext:
           capabilities:
@@ -137,7 +137,7 @@ spec:
         - "--direct=1"
         - "--directory=/test"
         volumeMounts:
-        - name: fio-mount
+        - name: test-volume
           mountPath: /test
         securityContext:
           capabilities:
