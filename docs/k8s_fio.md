@@ -104,27 +104,27 @@ spec:
     spec:
       containers:
       - name: fio-client
-	    image: localhost:5000/alpine-fio
-		imagePullPolicy: Always
-		command: ["fio", "--server=fio-server:8765"]
-		args:
-		- "--name=test"        # Specifies the name of the test
-		- "--ioengine=libaio"  # Sets the I/O engine to libaio (Linux native asynchronous I/O)
-		- "--rw=read"          # I/O mode: sequential read (other options: write, randread, randwrite, etc.)
-		- "--bs=4k"            # Block size for I/O operations (4 KiB in this case)
-		- "--size=1G"          # Total size of the test file (1 GiB in this case)
-		- "--numjobs=1"        # Number of parallel jobs/processes (1 job in this case)
-		- "--runtime=60"       # Test runtime in seconds (60 seconds in this case)
-		- "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
-		volumeMounts:
-		- name: fio-volume
-		  mountPath: /test
-	  volumes:
-	  - name: fio-volume
-	    hostPath:
-	  	  path: /mnt/fio-test      # Test this storage path
-	  	  type: DirectoryOrCreate  # Creates if doesn't exist
-	  restartPolicy: Never         # Don't restart after completion
+        image: localhost:5000/alpine-fio
+        imagePullPolicy: Always
+        command: ["fio", "--server=fio-server:8765"]
+        args:
+          - "--name=test"        # Specifies the name of the test
+          - "--ioengine=libaio"  # Sets the I/O engine to libaio (Linux native asynchronous I/O)
+          - "--rw=read"          # I/O mode: sequential read (other options: write, randread, randwrite, etc.)
+          - "--bs=4k"            # Block size for I/O operations (4 KiB in this case)
+          - "--size=1G"          # Total size of the test file (1 GiB in this case)
+          - "--numjobs=1"        # Number of parallel jobs/processes (1 job in this case)
+          - "--runtime=60"       # Test runtime in seconds (60 seconds in this case)
+          - "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
+        volumeMounts:
+        - name: fio-volume
+          mountPath: /test
+      volumes:
+      - name: fio-volume
+        hostPath:
+          path: /mnt/fio-test      # Test this storage path
+          type: DirectoryOrCreate  # Creates if doesn't exist
+      restartPolicy: Never         # Don't restart after completion
   backoffLimit: 0
 ```
 
