@@ -1,6 +1,6 @@
 ## Prepare fio image
-- Use an official or community-provided fio image (e.g., `ubuntu:fio`, ensuring fio is pre-installed in the image).
-- Build a custom image containing fio.
+- Use an official or community-provided fio image (e.g., `ubuntu:fio`, ensuring fio is pre-installed in the image)
+- Build a custom image containing fio
 ```dockerfile title="FIO Dockerfile"
 # Use Alpine Linux as the base image
 FROM alpine:latest
@@ -23,6 +23,15 @@ docker build -t alpine:fio -f fio_dockerfile .
 docker run -it --rm --network=host alpine:fio fio --version
 ```
 
+- Ensure k8s nodes can access local image
+```bash title="Use local registry for multi-node clusters"
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+
+docker tag alpine:fio localhost:5000/alpine-fio
+
+docker push localhost:5000/alpine-fio
+```
+
 ## Create fio-test.yaml
 *To test persistent storage performance, add volumes and volumeMounts to the Pod configuration, and mount the test directory to a Persistent Volume Claim (PVC).*
 ```yaml title="fio-test.yaml"
@@ -34,8 +43,8 @@ metadata:
 spec:
   containers:
   - name: fio-container
-    image: alpine:fio
-    imagePullPolicy: Never
+    image: localhost:5000/alpine-fio
+    imagePullPolicy: Always
     command: ["fio"]
     args:
       - "--name=test"        # Specifies the name of the test
