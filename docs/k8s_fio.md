@@ -26,6 +26,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: fio-test
+  namespace: default
 spec:
   containers:
   - name: fio-container
