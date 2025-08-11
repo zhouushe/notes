@@ -46,6 +46,10 @@ spec:
       - "--numjobs=1"        # Number of parallel jobs/processes (1 job in this case)
       - "--runtime=60"       # Test runtime in seconds (60 seconds in this case)
       - "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
+  volumes:
+    - name: test-volume
+      hostPath:
+        path: /mnt/fio-test
   restartPolicy: Never       # The container will not restart automatically after the FIO job completes or fails
 ```
 
