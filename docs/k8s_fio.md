@@ -112,7 +112,6 @@ kubectl apply -f fio-server-service.yaml
 
 ## Create fio-client.yaml
 -  Create fio-client.yaml
-*To test persistent storage performance, add volumes and volumeMounts to the Pod configuration, and mount the test directory to a Persistent Volume Claim (PVC).*
 ```yaml title="fio-client.yaml"
 apiVersion: batch/v1
 kind: Job
