@@ -124,7 +124,7 @@ spec:
 	    hostPath:
 	  	  path: /mnt/fio-test      # Test this storage path
 	  	  type: DirectoryOrCreate  # Creates if doesn't exist
-	  restartPolicy: Never           # Don't restart after completion
+	  restartPolicy: Never         # Don't restart after completion
   backoffLimit: 0
 ```
 
