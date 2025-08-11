@@ -9,7 +9,7 @@ FROM alpine:latest
 RUN apk add --no-cache fio
 
 # Set FIO working directory
-WORKDIR /data
+WORKDIR /fio-data
 
 # Expose FIO server port (default 8765)
 EXPOSE 8765
@@ -70,11 +70,15 @@ spec:
       - "--numjobs=1"        # Number of parallel jobs/processes (1 job in this case)
       - "--runtime=60"       # Test runtime in seconds (60 seconds in this case)
       - "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
+    volumeMounts:
+      - name: fio-volume
+        mountPath: /fio-data
   volumes:
-    - name: test-volume
+    - name: fio-volume
       hostPath:
-        path: /mnt/fio-test
-  restartPolicy: Never       # The container will not restart automatically after the FIO job completes or fails
+        path: /mnt/fio-test           # Test this storage path
+        type: DirectoryOrCreate       # Creates if doesn't exist
+  restartPolicy: Never                # Don't restart after completion
 ```
 
 ## Deploy Pod & Run Test
