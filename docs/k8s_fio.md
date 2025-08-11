@@ -12,7 +12,7 @@ RUN apk add --no-cache fio
 WORKDIR /data
 
 # Define the default command to run fio
-CMD ["fio"]
+CMD ["fio", "--server"]
 ```
 
 ```bash title="Build FIO Docker image"
