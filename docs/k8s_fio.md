@@ -47,8 +47,9 @@ docker tag alpine:fio localhost:5000/alpine-fio
 docker push localhost:5000/alpine-fio
 ```
 
-## Create fio-server.yaml
-```yaml title="fio-client.yaml"
+## Deploy FIO Server
+- Create fio-server.yaml
+```yaml title="fio-server.yaml"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -78,21 +79,39 @@ spec:
         hostPath:
           path: /mnt/fio-test
           type: DirectoryOrCreate
----
+```
+- Deploy FIO Server
+```bash title="Deploy fio server"
+kubectl apply -f fio-server.yaml
+```
+
+## Wait for FIO Server Ready
+```bash title="Wait for FIO server to be ready"
+kubectl wait --for=condition=available deployment/fio-server --timeout=300s
+```
+
+## Deploy FIO Service
+- Create fio-server-service.yaml
+```yaml title="fio-server-service.yaml"
 apiVersion: v1
 kind: Service
 metadata:
-  name: fio-server
+  name: fio-server-service
 spec:
   selector:
-    app: fio-server
+    app: fio-server-service
   ports:
     - protocol: TCP
       port: 8765
       targetPort: 8765
 ```
+- Deploy FIO Service
+```bash title="Deploy fio service"
+kubectl apply -f fio-server-service.yaml
+```
 
 ## Create fio-client.yaml
+-  Create fio-client.yaml
 *To test persistent storage performance, add volumes and volumeMounts to the Pod configuration, and mount the test directory to a Persistent Volume Claim (PVC).*
 ```yaml title="fio-client.yaml"
 apiVersion: batch/v1
@@ -127,18 +146,7 @@ spec:
       restartPolicy: Never         # Don't restart after completion
   backoffLimit: 0
 ```
-
-## Deploy FIO Server
-```bash title="Deploy fio server"
-kubectl apply -f fio-server.yaml
-```
-
-## Wait for FIO Server Ready
-```bash title="Wait for FIO server to be ready"
-kubectl wait --for=condition=available deployment/fio-server --timeout=300s
-```
-
-## Deploy FIO Client
+- Deploy FIO Client
 ```bash title="Deploy fio client"
 kubectl apply -f fio-client.yaml
 ```
@@ -170,9 +178,10 @@ kubectl logs job/fio-client | jq '.jobs[] | {jobname: .jobname, read: .read, wri
 ## Clean Up
 - Delete Client
 ```bash title="Delete client"
-
+kubectl delete job fio-client -n default
 ```
 - Delete Server
 ```bash title="Delete server"
-
+kubectl delete deployment fio-server -n default
+kubectl delete svc fio-server-service -n default
 ```
