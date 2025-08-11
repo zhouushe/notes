@@ -69,18 +69,19 @@ spec:
       - name: fio-server
         image: localhost:5000/alpine-fio
         imagePullPolicy: Always
-        command: ["fio", "--server"]
+        command: ["fio"]
+        args: ["--server", "--port=8765"]
         ports:
         - containerPort: 8765
           name: fio-port
         volumeMounts:
-        - name: test-volume
+        - name: fio-volume
           mountPath: /test
         securityContext:
           capabilities:
             add: ["SYS_ADMIN"]
       volumes:
-      - name: test-volume
+      - name: fio-volume
         hostPath:
           path: /mnt/fio-test
           type: DirectoryOrCreate
@@ -124,20 +125,19 @@ spec:
       - name: fio-client
         image: localhost:5000/alpine-fio
         imagePullPolicy: Always
-        command: ["fio"]
+        command: ["fio", "--server=fio-server:8765"]
         args:
-        - "--client=fio-server-service.default.svc.cluster.local"
-        - "--name=test"
-        - "--ioengine=libaio"
-        - "--rw=randrw"
-        - "--bs=8k"
-        - "--size=1M"
-        - "--numjobs=3"
-        - "--runtime=150"
-        - "--direct=1"
-        - "--directory=/test"
+          - "--client=fio-server-service.default.svc.cluster.local"
+          - "--name=test"        # Specifies the name of the test
+          - "--ioengine=libaio"  # Sets the I/O engine to libaio (Linux native asynchronous I/O)
+          - "--rw=read"          # I/O mode: sequential read (other options: write, randread, randwrite, etc.)
+          - "--bs=8k"            # Block size for I/O operations (4 KiB in this case)
+          - "--size=1M"          # Total size of the test file (1 GiB in this case)
+          - "--numjobs=3"        # Number of parallel jobs/processes (1 job in this case)
+          - "--runtime=150"      # Test runtime in seconds (60 seconds in this case)
+          - "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
         volumeMounts:
-        - name: test-volume
+        - name: fio-volume
           mountPath: /test
         securityContext:
           capabilities:
