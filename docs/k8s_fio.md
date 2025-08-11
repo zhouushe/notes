@@ -54,6 +54,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: fio-server
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -67,18 +68,36 @@ spec:
       containers:
       - name: fio-server
         image: localhost:5000/alpine-fio
-        command: ["fio"]
-        args: ["--server", "--port=8765"]
+        imagePullPolicy: Always
+        command: ["fio", "--server"]
         ports:
         - containerPort: 8765
+          name: fio-port
         volumeMounts:
-        - name: test-volume
+        - name: test-mount
           mountPath: /test
+        securityContext:
+          capabilities:
+            add: ["SYS_ADMIN"]
       volumes:
       - name: test-volume
         hostPath:
           path: /mnt/fio-test
           type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fio-server-service
+  namespace: default
+spec:
+  selector:
+    app: fio-server
+  ports:
+  - protocol: TCP
+    port: 8765
+    targetPort: 8765
+  type: ClusterIP
 ```
 - Deploy FIO Server
 ```bash title="Deploy fio server"
@@ -90,26 +109,6 @@ kubectl apply -f fio-server.yaml
 kubectl wait --for=condition=available deployment/fio-server --timeout=300s
 ```
 
-## Deploy FIO Service
-- Create fio-server-service.yaml
-```yaml title="fio-server-service.yaml"
-apiVersion: v1
-kind: Service
-metadata:
-  name: fio-server-service
-spec:
-  selector:
-    app: fio-server-service
-  ports:
-    - protocol: TCP
-      port: 8765
-      targetPort: 8765
-```
-- Deploy FIO Service
-```bash title="Deploy fio service"
-kubectl apply -f fio-server-service.yaml
-```
-
 ## Create fio-client.yaml
 -  Create fio-client.yaml
 ```yaml title="fio-client.yaml"
@@ -117,6 +116,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: fio-client
+  namespace: default
 spec:
   template:
     spec:
@@ -124,26 +124,31 @@ spec:
       - name: fio-client
         image: localhost:5000/alpine-fio
         imagePullPolicy: Always
-        command: ["fio", "--server=fio-server:8765"]
+        command: ["fio"]
         args:
-          - "--name=test"        # Specifies the name of the test
-          - "--ioengine=libaio"  # Sets the I/O engine to libaio (Linux native asynchronous I/O)
-          - "--rw=read"          # I/O mode: sequential read (other options: write, randread, randwrite, etc.)
-          - "--bs=4k"            # Block size for I/O operations (4 KiB in this case)
-          - "--size=1G"          # Total size of the test file (1 GiB in this case)
-          - "--numjobs=1"        # Number of parallel jobs/processes (1 job in this case)
-          - "--runtime=60"       # Test runtime in seconds (60 seconds in this case)
-          - "--direct=1"         # Enables direct I/O, bypassing the cache (1 = enabled)
+        - "--client=fio-server-service.default.svc.cluster.local"
+        - "--name=test"
+        - "--ioengine=libaio"
+        - "--rw=randrw"
+        - "--bs=8k"
+        - "--size=1M"
+        - "--numjobs=3"
+        - "--runtime=150"
+        - "--direct=1"
+        - "--directory=/test"
         volumeMounts:
-        - name: fio-volume
+        - name: fio-mount
           mountPath: /test
+        securityContext:
+          capabilities:
+            add: ["SYS_ADMIN"]
       volumes:
       - name: fio-volume
         hostPath:
           path: /mnt/fio-test      # Test this storage path
           type: DirectoryOrCreate  # Creates if doesn't exist
       restartPolicy: Never         # Don't restart after completion
-  backoffLimit: 0
+  backoffLimit: 3
 ```
 - Deploy FIO Client
 ```bash title="Deploy fio client"
