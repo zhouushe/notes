@@ -8,8 +8,11 @@ FROM alpine:latest
 # Install dependencies and FIO
 RUN apk add --no-cache fio
 
-# Set working directory
+# Set FIO working directory
 WORKDIR /data
+
+# Expose FIO server port (default 8765)
+EXPOSE 8765
 
 # Define the default command to run fio
 CMD ["fio", "--server"]
