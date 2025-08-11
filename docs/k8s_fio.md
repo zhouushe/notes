@@ -145,9 +145,9 @@ spec:
       volumes:
       - name: fio-volume
         hostPath:
-          path: /mnt/fio-test      # Test this storage path
-          type: DirectoryOrCreate  # Creates if doesn't exist
-      restartPolicy: Never         # Don't restart after completion
+          path: /mnt/fio-test
+          type: DirectoryOrCreate
+      restartPolicy: Never
   backoffLimit: 3
 ```
 - Deploy FIO Client
