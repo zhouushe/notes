@@ -55,6 +55,8 @@ kind: Pod
 metadata:
   name: fio-test
   namespace: default
+  labels:
+    app: fio-benchmark
 spec:
   containers:
   - name: fio-container
