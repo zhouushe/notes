@@ -160,5 +160,57 @@ user.save()
 
 println(token.plainValue)
 ```
+```groovy title="This is an example get node IP and labels mapping"
+import jenkins.model.Jenkins
+
+void getNodeIPLabelsMapping() {
+    Jenkins.get().computers.each { computer ->
+        if (computer.online && computer.node) {
+            println("host=${computer.getHostName()}, labels=${computer.node.getLabelString()}")
+        }
+    }
+}
+
+getNodeIPLabelsMapping()
+```
+```groovy title="This is an example get node IP and labels mapping"
+import jenkins.model.Jenkins
+import hudson.plugins.sshslaves.SSHLauncher
+
+void getNodeIPLabelsMapping() {
+    Jenkins.get().nodes.each { node ->
+        Computer computer = node.toComputer()
+        if (computer?.online) {
+            def launcher = computer.getLauncher()
+            if (launcher instanceof SSHLauncher) {
+                println("host=${launcher.host}, labels=${node.getLabelString()}")
+            }
+        }
+    }
+}
+
+getNodeIPLabelsMapping()
+```
+```groovy title="This is an example get node IP and labels mapping"
+import jenkins.model.Jenkins
+
+void getNodeIPLabelsMapping() {
+    Jenkins.get().computers.each { computer ->
+        if (computer.online) {
+            XmlFile xmlFile = Jenkins.get().getNodesObject().getConfigFile(computer.node.nodeName)
+            if (xmlFile.exists()) {
+                Document doc = XmlUtil.parseXml(xmlFile.file.text)
+                String host = doc.getElementsByTagName("host")?.item(0)?.textContent
+                String labelString = doc.getElementsByTagName("label")?.item(0)?.textContent
+                if (host && labelString) {
+                    println("host=${host}, labels=${labelString}")
+                }
+            }
+        }
+    }
+}
+
+getNodeIPLabelsMapping()
+```
 !!! quote
     For more details, please refer to the official Jenkins documentation [Jenkins Official Website](https://www.jenkins.io/)
