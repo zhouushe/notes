@@ -160,6 +160,7 @@ user.save()
 
 println(token.plainValue)
 ```
+- Jenkins Get Node IP and Labels
 ```groovy title="This is an example get node IP and labels mapping"
 import jenkins.model.Jenkins
 
