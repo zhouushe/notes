@@ -171,8 +171,6 @@ void getNodeIPLabelsMapping() {
         }
     }
 }
-
-getNodeIPLabelsMapping()
 ```
 ```groovy title="This is an example get node IP and labels mapping"
 import jenkins.model.Jenkins
@@ -189,8 +187,6 @@ void getNodeIPLabelsMapping() {
         }
     }
 }
-
-getNodeIPLabelsMapping()
 ```
 ```groovy title="This is an example get node IP and labels mapping"
 import jenkins.model.Jenkins
@@ -210,8 +206,6 @@ void getNodeIPLabelsMapping() {
         }
     }
 }
-
-getNodeIPLabelsMapping()
 ```
 !!! quote
     For more details, please refer to the official Jenkins documentation [Jenkins Official Website](https://www.jenkins.io/)
