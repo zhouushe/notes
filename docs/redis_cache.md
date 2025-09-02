@@ -1,8 +1,20 @@
 ## Redis Hot Data Cache
+```bash title="Redis global environment variable"
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSWORD=
+
+DEFAULT_EXPIRE=3600
+HOT_DATA_THRESHOLD=100
+```
+
 ```python title="Redis hot data cache"
 import logging
+import os
 import time
 
+from dotenv import load_dotenv
 from walrus import Database
 
 LOGGER = logging.getLogger(__name__)
@@ -13,21 +25,41 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 LOGGER.addHandler(handler)
 
+load_dotenv()
+
 
 class HotDataCache(object):
-    # Cache configuration
-    DEFAULT_EXPIRE = 3600  # Default expiration time: 1 hour
-    HOT_DATA_THRESHOLD = 100  # Data with accesses exceeding this threshold is considered hot
+    """Redis hot data cache"""
 
-    def __init__(self, host='localhost', port=6379, db=0):
+    def __init__(self, host=None, port=None, db=None, password=None):
         """Initialize Redis connection and cache structure"""
-        self.db = Database(host=host, port=port, db=db)
+        # Get redis connection
+        self.db = self.get_redis_connection(host, port, db, password)
 
         # Create hash table to store hot data
         self.hot_data = self.db.Hash('hot_data')
 
         # Sorted set to record data access frequency
         self.access_frequency = self.db.ZSet('access_frequency')
+
+    @staticmethod
+    def get_redis_connection(host, port, db, password):
+        return Database(
+            host=host or os.getenv('REDIS_HOST', 'localhost'),
+            port=port or int(os.getenv('REDIS_PORT', 6379)),
+            db=db or int(os.getenv('REDIS_DB', 0)),
+            password=password or os.getenv('REDIS_PASSWORD')
+        )
+
+    @staticmethod
+    def get_hot_data_expire(expire=None):
+        """Get hot data expiration time (seconds)"""
+        return expire or os.getenv('DEFAULT_EXPIRE')
+
+    @staticmethod
+    def get_hot_data_threshold(threshold=None):
+        """Get hot data threshold"""
+        return threshold or os.getenv('HOT_DATA_THRESHOLD')
 
     def get(self, key):
         """Get cached data and update access frequency if it exists"""
@@ -36,39 +68,29 @@ class HotDataCache(object):
         if data is not None:
             # Update access frequency (increment by 1)
             self.access_frequency.incr(key, 1)
-            return data.decode('utf-8')  # Decode to string
+            return data.decode('utf-8')
+
         return None
 
     def set(self, key, value, expire=None):
         """Set cached data with support for custom expiration time"""
-        expire = expire or self.DEFAULT_EXPIRE
-
         # Set data
         self.hot_data[key] = value
 
         # Set expiration time
-        self.db.expire(key, expire)
+        self.db.expire(key, self.get_hot_data_expire(expire))
 
         # Initial access count
         self.access_frequency.incr(key, 1)
 
-    def delete(self, key):
-        """Delete cached data"""
-        if key in self.hot_data:
-            del self.hot_data[key]
-            self.access_frequency.remove(key)
-            return True
-        return False
-
     def get_hot_data(self, count=10):
-        """Get the most frequently accessed hot data"""
-        # Sort by access frequency in descending order, take first 'count' items
+        """Get the most frequently accessed hot data. Sort by access frequency in descending order"""
         return self.access_frequency.range(0, count - 1, with_scores=True, reverse=True)
 
     def clean_expired_data(self):
         """Clean up expired data (Redis usually handles this automatically, but can be triggered manually)"""
-        # In practical applications, Redis automatically cleans up expired keys, this is just a demonstration
         expired_keys = []
+
         for key in self.hot_data:
             if not self.db.exists(key):
                 expired_keys.append(key)
@@ -78,10 +100,16 @@ class HotDataCache(object):
 
         return expired_keys
 
+    def delete(self, key):
+        """Delete cached data"""
+        if key in self.hot_data:
+            del self.hot_data[key]
+            self.access_frequency.remove(key)
+            return True
+        return False
 
-# Demonstration usage
+
 if __name__ == '__main__':
-    # Initialize cache
     cache = HotDataCache()
 
     # Simulate writing some dynamic data
@@ -108,9 +136,9 @@ if __name__ == '__main__':
     for item in hot_items:
         LOGGER.info('Key: {}, Access count: {}'.format(item[0].decode('utf-8'), int(item[1])))
 
-    # Simulate time passing (10 seconds)
-    LOGGER.info('Waiting for 10 seconds...')
-    time.sleep(10)
+    # Simulate time passing (5 seconds)
+    LOGGER.info('Waiting for 5 seconds...')
+    time.sleep(5)
 
     # Clean up expired data (demonstration)
     expired = cache.clean_expired_data()
