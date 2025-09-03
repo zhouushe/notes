@@ -1,6 +1,6 @@
 ## Prerequisites
-- Redis Installation Release
-https://github.com/redis-windows/redis-windows/releases
+### Redis Installation Release
+[https://github.com/redis-windows/redis-windows/releases](https://github.com/redis-windows/redis-windows/releases)
 
 ## Redis Hot Data Cache
 ### Redis Global Environment Variable
