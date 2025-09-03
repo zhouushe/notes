@@ -159,13 +159,13 @@ class HybridStorage(object):
 if __name__ == '__main__':
     hybrid_storage = HybridStorage()
 
-    print('Clearing users cache...')
+    print('Clearing user cache...')
     hybrid_storage.clear_user_cache()
     print('-------------------------------------------------------------')
 
     print('Adding users (username, email, full_name)...')
-    hybrid_storage.add_user(1, 'simon_zhou', 'john@example.com', 'Simon')
-    hybrid_storage.add_user(2, 'jane_liu', 'jane@example.com', 'Jane Liu')
+    hybrid_storage.add_user(1, 'simon_zhou', 'simon.zhou@example.com', 'Simon')
+    hybrid_storage.add_user(2, 'jane_liu', 'jane.liu@example.com', 'Jane Liu')
     print('-------------------------------------------------------------')
 
     print('Getting user1 from storage firstly...')
@@ -191,13 +191,13 @@ if __name__ == '__main__':
 
 ## Hybrid Storage Output
 ```plaintext title="Hybrid storage output"
-Clearing users cache...
+Clearing user cache...
 -------------------------------------------------------------
 Adding users (username, email, full_name)...
 -------------------------------------------------------------
 Getting user1 from storage firstly...
 Get user 1 from persistent storage
-{'user_id': 1, 'username': 'simon_zhou', 'email': 'john@example.com', 'full_name': 'Simon'}
+{'user_id': 1, 'username': 'simon_zhou', 'email': 'simon.zhou@example.com', 'full_name': 'Simon'}
 -------------------------------------------------------------
 Getting user1 from cache secondly...
 Get user 1 from cache
@@ -207,5 +207,5 @@ Updating user1 full name...
 -------------------------------------------------------------
 Getting user1 again from storage (invalidated cache)...
 Get user 1 from persistent storage
-{'user_id': 1, 'username': 'simon_zhou', 'email': 'john@example.com', 'full_name': 'Simon Zhou'}
+{'user_id': 1, 'username': 'simon_zhou', 'email': 'simon.zhou@example.com', 'full_name': 'Simon Zhou'}
 ```
