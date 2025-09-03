@@ -48,6 +48,8 @@ nav:
       - K8S Setup: k8s_setup.md
       - K8S Command: k8s_command.md
       - K8S FIO: k8s_fio.md
+  - Redis:
+      - Redis Hot Data Cache: redis_hot_data_cache.md
 
 markdown_extensions:
   - toc:
