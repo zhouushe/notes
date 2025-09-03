@@ -2,7 +2,7 @@
 - [Redis Installation Release](https://github.com/redis-windows/redis-windows/releases)
 
 ## Redis Hot Data Cache
-### Redis Global Environment Variable
+### Global Environment Variables
 ```bash title=".env"
 REDIS_HOST=localhost
 REDIS_PORT=6379
