@@ -50,6 +50,7 @@ nav:
       - K8S FIO: k8s_fio.md
   - Redis:
       - Redis Hot Data Cache: redis_hot_data_cache.md
+      - Hybrid Storage: hybrid_storage.md
 
 markdown_extensions:
   - toc:
