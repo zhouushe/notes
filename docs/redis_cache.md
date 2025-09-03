@@ -1,5 +1,10 @@
+## Prerequisites
+- Redis Installation Release
+https://github.com/redis-windows/redis-windows/releases
+
 ## Redis Hot Data Cache
-```bash title="Redis global environment variable"
+### Redis Global Environment Variable
+```bash title=".env"
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_DB=0
@@ -8,8 +13,8 @@ REDIS_PASSWORD=
 DEFAULT_EXPIRE=30
 HOT_DATA_THRESHOLD=100
 ```
-
-```python title="Redis hot data cache"
+### Redis Hot Data Cache
+```python title="redis_hot_data_cache.py"
 import logging
 import os
 import time
@@ -183,7 +188,7 @@ if __name__ == '__main__':
     hot_data_cache.clear_hot_data('product:2001')
     LOGGER.info('Get product:2001 = {} after expire'.format(hot_data_cache.get_hot_data('product:2001')))
 ```
-
+### Redis Hot Data Cache Output
 ```plaintext title="Redis hot data cache output"
 2025-09-02 14:36:09,247 - __main__ - INFO - Cleaning all data firstly...
 2025-09-02 14:36:09,267 - __main__ - INFO - -------------------------------------------------------------
