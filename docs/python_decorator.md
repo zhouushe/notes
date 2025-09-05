@@ -3,8 +3,6 @@
 #!/usr/bin/env python -tt
 # -*- coding: utf-8 -*-
 
-"""This module provides a collection of reusable decorators for common Python patterns"""
-
 from __future__ import absolute_import, unicode_literals
 
 from concurrent.futures import ThreadPoolExecutor
@@ -61,6 +59,15 @@ def parallel_iterator(func):
 ```
 ## Usage
 ```python title="decorator_test.py"
+#!/usr/bin/env python -tt
+# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import, unicode_literals
+
+from decorators import conditional_execution
+from decorators import parallel_iterator
+
+
 @parallel_iterator
 def check_container_runtime(hosts):
     # ToDo...
