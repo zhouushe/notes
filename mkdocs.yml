@@ -49,8 +49,10 @@ nav:
       - K8S Command: k8s_command.md
       - K8S FIO: k8s_fio.md
   - Redis:
-      - Redis Hot Data Cache: redis_hot_data_cache.md
+      - Hot Data Cache: redis_hot_data_cache.md
       - Hybrid Storage: hybrid_storage.md
+  - Python:
+      - Decorator: python_decorator.md
 
 markdown_extensions:
   - toc:
