@@ -55,7 +55,6 @@ def parallel_iterator(func):
                 future.result()
 
     return wrapper
-
 ```
 ## Usage
 ```python title="decorator_test.py"
