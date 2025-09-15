@@ -316,3 +316,11 @@ if __name__ == '__main__':
     workflow.log_step('create clone')
     workflow.create_clone(file_system='clone_file_system', clone_param={'name': 'lit_clone', 'size_total': 100})
 ```
+
+### Output
+```plaintext title="output"
+INFO:worker.step.step_worker:[STEP 1]: create snapshot
+INFO:operation.snapshot.snapshot_operation:file_system_workflow create snapshot_file_system with param {'name': 'lit_snap', 'count': 3}
+INFO:worker.step.step_worker:[STEP 2]: create clone
+INFO:operation.clone.clone_operation:file_system_workflow create clone_file_system with param {'name': 'lit_clone', 'size_total': 100}
+```
