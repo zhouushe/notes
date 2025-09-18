@@ -22,6 +22,17 @@
   - Treat username as secret
   - Password
   - ID (e.g., `GIT_BUILDER`)
-  - Description (e.g., `GitHub Token for service account xxxxxx`)
+  - Description (e.g., `GitHub token for service account xxx`)
+
 ## Configure Library on Jenkins Server
-  - 
+**Manage Jenkins** → **System**
+- Library
+  - Name (e.g., `xxx-qe-jenkins`)
+  - Default version (e.g., `main`)
+- Allow default version to be overridden
+- Include @Library changes in job recent changes
+- Retrieval method (`Modern SCM`)
+  - Source Code Management (`Git`)
+    - Project Repository (e.g., `https://<GitHub-server>/<owner>/<repo>.git`)
+    - Credentials (e.g., `GitHub token for service account xxx`)
+  - Library Path (optional) (e.g., `./`)
