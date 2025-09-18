@@ -96,3 +96,7 @@
     ```
 
 # Workflow
+_GitHub events (ISSUE_COMMENT, PULL_REQUEST, PUSH) to trigger Jenkins job github_webhook_dispatcher via Generic Webhook Trigger plugin._
+
+## 1. Launch entry `launch(this)` with this Jenkins job `github_webhook_dispatcher` session
+**Jenkins pipeline can get env params (e.g., `JENKINS_URL`, `JOB_URL`, `BUILD_URL`) and currentBuild info via session**
