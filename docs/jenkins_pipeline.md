@@ -73,6 +73,15 @@
       - JSONPath
     - Header parameters
       - Request header (e.g., `X-GitHub-Event`)
+    - Cause
+      - GitHub web hook listener
+- Source Code Management
+  - Git
+    - Repositories
+      - Repository URL (e.g., `https://<GitHub-server>/<owner>/<repo>.git`)
+      - Credentials (e.g., `GitHub token for service account xxx`)
+    - Branches to build
+      - Branch Specifier (blank for 'any')  (e.g., `main`)
 - Pipeline
   - Definition (Pipeline script)
     ```groovy title="pipeline script"
