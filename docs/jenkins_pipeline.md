@@ -24,6 +24,13 @@
   - ID (e.g., `GIT_BUILDER`)
   - Description (e.g., `GitHub token for service account xxx`)
 
+## Configure Environment on Jenkins Server
+**Manage Jenkins** → **System**
+- Global properties
+  - Environment variables
+    - Name (e.g., `CFG_JENKINS_ENV`)
+    - Value (e.g., `test` or `product`)
+
 ## Configure Library on Jenkins Server
 **Manage Jenkins** → **System**
 - Library
