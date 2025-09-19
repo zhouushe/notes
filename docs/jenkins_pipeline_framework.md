@@ -96,10 +96,13 @@
     ```
 
 # Workflow
-_GitHub events (ISSUE_COMMENT, PULL_REQUEST, PUSH) to trigger Jenkins job github_webhook_dispatcher via Generic Webhook Trigger plugin._
+_GitHub events (PULL_REQUEST, ISSUE_COMMENT, PUSH) to trigger Jenkins job `github_webhook_dispatcher` via `Generic Webhook Trigger` plugin._  
+_Jenkins job can directly trigger pipeline which inherits base pipeline `BasePipeline` with payload as well._
 
-## 1. Launch entry `launch(this)` with this Jenkins job `github_webhook_dispatcher` session
-**Jenkins pipeline can get env params (e.g., `JENKINS_URL`, `JOB_URL`, `BUILD_URL`) and currentBuild info via session**
+## 1. Launch entry point `launch(this)` with Jenkins job (e.g., `github_webhook_dispatcher`, `check_code`) session
+**Jenkins pipeline can get `env` (e.g., `JENKINS_URL`, `JOB_URL`, `BUILD_URL`), `params` and `currentBuild` via session**
+- Initialize `env`, `params` and `currentBuild` with session
+- Get job name via `env.getProperty("JOB_NAME")`
 
 ## 2. Find all pipeline class which inherits supper class `Pipeline` and filter the pipeline class which is corresponding to `JOB_NAME`
 **Pipeline class inheritance hierarchy**
@@ -151,21 +154,32 @@ _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
     }
 ```
 ### If the matched pipeline is `GithubWebhookDispatcherPipeline`
-  - Load payload in `onInit()`  
-    _Load payload according to EVENT_TYPE (`x_github_event`) and PAYLOAD (`payload`)_
-    - EventTypeEnum (`PULL_REQUEST`, `ISSUE_COMMENT`, `PUSH`)
-    - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`, `JSONUtil.toBean(payload, PushPayload.class)`)
-  - Start pipeline workflow in `start()`
-    - Set build description
-    - Find all pipeline class which inherits supper class `BaseWebhookPipeline`
-    - Check if the matched pipeline supports payload class such as `PullRequestPayload`, `IssueCommentPayload`, `PushPayload`
-    - Check if the matched pipeline accepts payload with pipeline's annotation. e.g.,  
-      `@GenericPullRequestListener(repository = ["<owner>/<repo>"], baseBranch = ["main"], action = [opened, reopened, synchronize], comment = "check xxx")`
-    - Trigger the matched pipeline with payload
+- Load payload in `onInit()`  
+  _Load payload according to EVENT_TYPE (`x_github_event`) and PAYLOAD (`payload`)_
+  - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`, `JSONUtil.toBean(payload, PushPayload.class)`)
+- Start pipeline workflow in `start()`
+  - Find all pipeline class which inherits supper class `BaseWebhookPipeline`
+  - Check if it's supported payload (invoke `support()` in the the matched pipeline)
+  - Check if it's accepted payload VS pipeline annotation (invoke `accept(payload)` in the the matched pipeline)
+  - Trigger the matched pipeline with payload
+
 ### If the matched pipeline is sub class of `BaseWebhookPullRequestPipeline`
+**Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session**
+- Load payload in `onInit()`
+  - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`)
+  - Handle `GenericPullRequestPayload` payload (i.e. including `PullRequestResponse`, `eventType`, `sender`, `repository`, `organization`)
+  - Wrap `GenericPullRequestPayloadWrapperImpl` class (e.g., `getBaseBranch()`, `getHeadBranch()`, `checkout()`, `updateStatus(...)`, `listFiles()`)
+- Is supported payload (i.e. `PullRequestPayload`, `IssueCommentPayload`) in `Set<Class<? extends WebhookPayload>> support()`?
+- Is accepted payload VS pipeline annotation in `accept(WebhookPayload payload)`? e.g.,  
+  `@GenericPullRequestListener(repository = ["<owner>/<repo>"], baseBranch = ["main"], action = [opened, reopened, synchronize], comment = "check xxx")`
+- Start pipeline workflow in `start()`
 
 ### If the matched pipeline is sub class of `BaseWebhookIssueCommentPipeline`
+**Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session**
+_It's similar to `BaseWebhookPullRequestPipeline`_
 
 ### If the matched pipeline is sub class of `BaseWebhookPushPipeline`
+**Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session**
+
 
 ### If the matched pipeline is another one (such as `SimonDemoPipeline`)
