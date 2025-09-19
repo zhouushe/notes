@@ -194,5 +194,5 @@ _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry po
 - Start pipeline workflow in `start()`
 
 ### If the matched pipeline is a direct subclass of `BasePipeline`
-- Start pipeline workflow in `start()` directly from entry point `execute()`
+- Start pipeline workflow in `start()` directly from entry point `execute()`  
 _Pipeline class can override `execute()` or `start()` from super class `BasePipeline`_
