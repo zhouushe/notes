@@ -112,23 +112,6 @@ Pipeline
         ├── BaseWebhookIssueCommentPipeline
         └── BaseWebhookPushPipeline
 ```
-```mermaid title="pipeline class inheritance hierarchy"
-flowchart TD
-    Pipeline[Pipeline]
-    BasePipeline[BasePipeline]
-    GithubWebhookDispatcherPipeline[GithubWebhookDispatcherPipeline]
-    BaseWebhookPipeline[BaseWebhookPipeline]
-    BaseWebhookPullRequestPipeline[BaseWebhookPullRequestPipeline]
-    BaseWebhookIssueCommentPipeline[BaseWebhookIssueCommentPipeline]
-    BaseWebhookPushPipeline[BaseWebhookPushPipeline]
-
-    BasePipeline -- implements --> Pipeline
-    GithubWebhookDispatcherPipeline -- extends --> BasePipeline
-    BaseWebhookPipeline -- extends --> BasePipeline
-    BaseWebhookPullRequestPipeline -- extends --> BaseWebhookPipeline
-    BaseWebhookIssueCommentPipeline -- extends --> BaseWebhookPipeline
-    BaseWebhookPushPipeline -- extends --> BaseWebhookPipeline
-```
 _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
 
 ## 3. Route to the matched pipeline entry point `execute()`
@@ -151,13 +134,13 @@ _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
                     Jenkins.timeout(getTimeout()) {
                         start()
                     }
-                    Jenkins.currentBuild.setResult("SUCCESS")
+                    Jenkins.currentBuild.setResult(Result.SUCCESS)
                     onSuccess()
                 } catch (FlowInterruptedException ignored) {
                     Jenkins.currentBuild.setResult(Result.ABORTED.toString())
                     onAborted()
                 } catch (Throwable throwable) {
-                    Jenkins.currentBuild.setResult("FAILURE")
+                    Jenkins.currentBuild.setResult(Result.FAILURE)
                     error(ExceptionUtil.stacktraceToString(throwable))
                     onFailed(throwable)
                 } finally {
@@ -167,7 +150,7 @@ _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
         }
     }
 ```
-- If the matched pipeline is `GithubWebhookDispatcherPipeline`
+### If the matched pipeline is `GithubWebhookDispatcherPipeline`
   - Load payload in `onInit()`  
     _Load payload according to EVENT_TYPE (`x_github_event`) and PAYLOAD (`payload`)_
     - EventTypeEnum (`PULL_REQUEST`, `ISSUE_COMMENT`, `PUSH`)
@@ -179,10 +162,10 @@ _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
     - Check if the matched pipeline accepts payload with pipeline's annotation. e.g.,  
       `@GenericPullRequestListener(repository = ["<owner>/<repo>"], baseBranch = ["main"], action = [opened, reopened, synchronize], comment = "check xxx")`
     - Trigger the matched pipeline with payload
-- If the matched pipeline is sub class of `BaseWebhookPullRequestPipeline`
+### If the matched pipeline is sub class of `BaseWebhookPullRequestPipeline`
 
-- If the matched pipeline is sub class of `BaseWebhookIssueCommentPipeline`
+### If the matched pipeline is sub class of `BaseWebhookIssueCommentPipeline`
 
-- If the matched pipeline is sub class of `BaseWebhookPushPipeline`
+### If the matched pipeline is sub class of `BaseWebhookPushPipeline`
 
-- If the matched pipeline is another one (such as `SimonDemoPipeline`)
+### If the matched pipeline is another one (such as `SimonDemoPipeline`)
