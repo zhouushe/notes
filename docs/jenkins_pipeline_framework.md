@@ -167,7 +167,7 @@ _`loadEnvConfig(getEnvConfigType())` will call `getEnvConfigType()` in the match
   - Check if it's accepted payload VS pipeline annotation (invoke `accept(payload)` in the the matched pipeline)
   - Trigger the matched pipeline with payload
 
-### If the matched pipeline is sub class of `BaseWebhookPullRequestPipeline`
+### If the matched pipeline is a subclass of `BaseWebhookPullRequestPipeline`
 _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session_  
 - Load payload in `onInit()`
   - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`)
@@ -180,11 +180,11 @@ _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry po
   `@GenericPullRequestListener(repository = ["<owner>/<repo>"], baseBranch = ["main"], action = [opened, reopened, synchronize], comment = "check xxx")`
 - Start pipeline workflow in `start()`
 
-### If the matched pipeline is sub class of `BaseWebhookIssueCommentPipeline`
+### If the matched pipeline is a subclass of `BaseWebhookIssueCommentPipeline`
 _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session_  
 _It's similar to `BaseWebhookPullRequestPipeline`_
 
-### If the matched pipeline is sub class of `BaseWebhookPushPipeline`
+### If the matched pipeline is a subclass of `BaseWebhookPushPipeline`
 _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `deploy_code`) session_  
 - Get `PushPayload` class in `getPayloadType()`
 - Get `XxxEnvConfig` class in `getEnvConfigType()`
@@ -193,6 +193,6 @@ _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry po
   `@PushListener(repository = ["<owner>/<repo>"], branch = ["main"])`
 - Start pipeline workflow in `start()`
 
-### If the matched pipeline is another one such as `SimonDemoPipeline`
+### If the matched pipeline is a direct subclass of `BasePipeline`
 - Start pipeline workflow in `start()` directly from entry point `execute()`
-_Pipeline class `SimonDemoPipeline` can override `execute()` or `start()` from super class `BasePipeline`_
+_Pipeline class can override `execute()` or `start()` from super class `BasePipeline`_
