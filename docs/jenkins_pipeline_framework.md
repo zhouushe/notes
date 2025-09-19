@@ -171,8 +171,8 @@ _`loadEnvConfig(getEnvConfigType())` will call `getEnvConfigType()` in the match
 _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session_  
 - Load payload in `onInit()`
   - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`)
-  - Handle `GenericPullRequestPayload` payload (i.e. including `PullRequestResponse`, `eventType`, `sender`, `repository`, `organization`)
-  - Wrap `GenericPullRequestPayloadWrapperImpl` class (e.g., `getBaseBranch()`, `getHeadBranch()`, `checkout()`, `updateStatus(...)`, `listFiles()`)
+  - Handle `GenericPullRequestPayload` payload (i.e. include property `PullRequestResponse`, `eventType`, `sender`, `repository`, `organization`)
+  - Wrap `GenericPullRequestPayloadWrapperImpl` class (e.g., wrap method `getBaseBranch()`, `getHeadBranch()`, `checkout()`, `updateStatus(...)`, `listFiles()`)
 - Get `PullRequestPayload` class in `getPayloadType()`
 - Get `XxxEnvConfig` class in `getEnvConfigType()`
 - Is supported payload (i.e. `PullRequestPayload`, `IssueCommentPayload`) in `Set<Class<? extends WebhookPayload>> support()`?
@@ -193,4 +193,6 @@ _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry po
   `@PushListener(repository = ["<owner>/<repo>"], branch = ["main"])`
 - Start pipeline workflow in `start()`
 
-### If the matched pipeline is another one (such as `SimonDemoPipeline`)
+### If the matched pipeline is another one such as `SimonDemoPipeline`
+- Start pipeline workflow in `start()` directly from entry point `execute()`
+_Pipeline class `SimonDemoPipeline` can override `execute()` or `start()` from super class `BasePipeline`_
