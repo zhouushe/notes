@@ -118,7 +118,8 @@ Pipeline
 _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
 
 ## 3. Route to the matched pipeline entry point `execute()`
-**`execute()` invocation sequence**
+**`execute()` invocation sequence:**  
+`init` → `load payload` → `load env config` → `pre-start` → `start` → `success/aborted/failed?` → `finish`
 ```groovy title="execute()"
     @Override
     void execute() {
@@ -153,6 +154,9 @@ _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
         }
     }
 ```
+_`loadPayload(getPayloadType())` will call `getPayloadType()` in the matched pipeline class_  
+_`loadEnvConfig(getEnvConfigType())` will call `getEnvConfigType()` in the matched pipeline class_
+
 ### If the matched pipeline is `GithubWebhookDispatcherPipeline`
 - Load payload in `onInit()`  
   _Load payload according to EVENT_TYPE (`x_github_event`) and PAYLOAD (`payload`)_
@@ -164,22 +168,29 @@ _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
   - Trigger the matched pipeline with payload
 
 ### If the matched pipeline is sub class of `BaseWebhookPullRequestPipeline`
-**Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session**
+_Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session_  
 - Load payload in `onInit()`
   - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`)
   - Handle `GenericPullRequestPayload` payload (i.e. including `PullRequestResponse`, `eventType`, `sender`, `repository`, `organization`)
   - Wrap `GenericPullRequestPayloadWrapperImpl` class (e.g., `getBaseBranch()`, `getHeadBranch()`, `checkout()`, `updateStatus(...)`, `listFiles()`)
+- Get `PullRequestPayload` class in `getPayloadType()`
+- Get `XxxEnvConfig` class in `getEnvConfigType()`
 - Is supported payload (i.e. `PullRequestPayload`, `IssueCommentPayload`) in `Set<Class<? extends WebhookPayload>> support()`?
 - Is accepted payload VS pipeline annotation in `accept(WebhookPayload payload)`? e.g.,  
   `@GenericPullRequestListener(repository = ["<owner>/<repo>"], baseBranch = ["main"], action = [opened, reopened, synchronize], comment = "check xxx")`
 - Start pipeline workflow in `start()`
 
 ### If the matched pipeline is sub class of `BaseWebhookIssueCommentPipeline`
-**Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session**
+_Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session_  
 _It's similar to `BaseWebhookPullRequestPipeline`_
 
 ### If the matched pipeline is sub class of `BaseWebhookPushPipeline`
-**Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session**
-
+_Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `deploy_code`) session_  
+- Get `PushPayload` class in `getPayloadType()`
+- Get `XxxEnvConfig` class in `getEnvConfigType()`
+- Is supported payload (i.e. `PushPayload`) in `Set<Class<? extends WebhookPayload>> support()`?
+- Is accepted payload VS pipeline annotation in `accept(WebhookPayload payload)`? e.g.,  
+  `@PushListener(repository = ["<owner>/<repo>"], branch = ["main"])`
+- Start pipeline workflow in `start()`
 
 ### If the matched pipeline is another one (such as `SimonDemoPipeline`)
