@@ -106,7 +106,9 @@ _Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
 
 ## 3. Route to the matched pipeline entry point `execute()`
 - If the matched pipeline is `GithubWebhookDispatcherPipeline`
-
+  - Load payload in `onInit()` according to EVENT_TYPE (`x_github_event`) and PAYLOAD (`payload`)
+    - EventTypeEnum (`PULL_REQUEST`, `ISSUE_COMMENT`, `PUSH`)
+    - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`, `JSONUtil.toBean(payload, PushPayload.class)`)
 - If the matched pipeline is sub class of `BaseWebhookPullRequestPipeline`
 
 - If the matched pipeline is sub class of `BaseWebhookIssueCommentPipeline`
