@@ -100,3 +100,17 @@ _GitHub events (ISSUE_COMMENT, PULL_REQUEST, PUSH) to trigger Jenkins job github
 
 ## 1. Launch entry `launch(this)` with this Jenkins job `github_webhook_dispatcher` session
 **Jenkins pipeline can get env params (e.g., `JENKINS_URL`, `JOB_URL`, `BUILD_URL`) and currentBuild info via session**
+
+## 2. Find pipeline class by supper `Pipeline` and filter pipeline class with `JOB_NAME`
+_Pipeline class to JOB_NAME mapping: `SimonDemoPipeline` → `simon_demo`_
+
+## 3. Route to the matched pipeline entry point `execute()`
+- If the matched pipeline is `GithubWebhookDispatcherPipeline`
+
+- If the matched pipeline is sub class of `BaseWebhookPullRequestPipeline`
+
+- If the matched pipeline is sub class of `BaseWebhookIssueCommentPipeline`
+
+- If the matched pipeline is sub class of `BaseWebhookPushPipeline`
+
+- If the matched pipeline is another one (such as `SimonDemoPipeline`)
