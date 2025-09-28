@@ -65,4 +65,12 @@ class DispatchFactory(object):
 
         return False
 
+    def __enter__(self):
+        # ToDo: will implement in future
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # ToDo: will implement in future
+        pass
+
 ```
