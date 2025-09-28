@@ -54,6 +54,7 @@ nav:
   - Python:
       - Decorator: python_decorator.md
       - Workflow: workflow.md
+      - Dispatch: dispatch.md
 
 markdown_extensions:
   - toc:
