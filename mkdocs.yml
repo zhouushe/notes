@@ -53,8 +53,8 @@ nav:
       - Hybrid Storage: hybrid_storage.md
   - Python:
       - Decorator: python_decorator.md
-      - Workflow: workflow.md
-      - Dispatch: dispatch.md
+      - Workflow: python_workflow.md
+      - Dispatch: python_dispatch.md
 
 markdown_extensions:
   - toc:
