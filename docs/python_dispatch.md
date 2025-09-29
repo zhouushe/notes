@@ -45,15 +45,20 @@ class DispatchFactory(object):
     @staticmethod
     def load_platform_operation(platform, class_name, target_operation):
         """load platform operation"""
+        operation_list = list()
+
         module = importlib.import_module(PLATFORM_OPERATION_MAPPING[platform])
 
         for _, clazz in inspect.getmembers(module, predicate=inspect.isclass):
             operations = DispatchFactory.get_platform_operations(clazz)
             for operation in operations:
                 if DispatchFactory.is_matched_operation(clazz, class_name, operation, target_operation):
-                    return clazz.__module__, clazz.__name__, operation
+                    operation_list.append((clazz.__module__, clazz.__name__, operation))
 
-        raise RuntimeError('Not found operation {} in {} for {}'.format(target_operation, class_name, platform))
+        assert operation_list, 'No operation {} in {} for {}'.format(target_operation, class_name, platform)
+        assert len(operation_list) == 1, 'More than one operation in {} for {}'.format(operation_list, platform)
+
+        return operation_list[0]
 
     @staticmethod
     def dispatch(platform, operation, **kwargs):
@@ -87,5 +92,9 @@ class DispatchFactory(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         # ToDo: will implement in future
         pass
+
+
+if __name__ == '__main__':
+    DispatchFactory.dispatch('platform1', 'demo_operation', name='dog', age=3)
 
 ```
