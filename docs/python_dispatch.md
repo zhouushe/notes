@@ -22,31 +22,40 @@ PLATFORM_OPERATION_MAPPING = {
 class DispatchFactory(object):
     """Dispatch factory class"""
 
-    def __init__(self, platform_name, operation_name):
-        self.platform_name = platform_name
+    def __init__(self, platform, operation):
+        self.platform = platform
 
-        match = re.match(r'^(\w+)\.(\w+)$', operation_name)
-        self.class_name, self.operation_name = match.groups() if match else (None, operation_name)
+        match = re.match(r'^(\w+)\.(\w+)$', operation)
+        self.class_name, self.operation = match.groups() if match else (None, operation)
+
+    @staticmethod
+    def get_platform_operations(clazz):
+        """get platform operations"""
+        members = inspect.getmembers(clazz, predicate=DispatchFactory.is_method_or_function)
+        operations = [name for (name, _) in members if not DispatchFactory.is_inherited_member(clazz, name)]
+        return operations
+
+    def is_matched_platform_operation(self, clazz, operation):
+        """check if matched platform operation"""
+        return self.operation == operation and (self.class_name is None or self.class_name == clazz.__name__)
 
     def load_platform_operation(self):
         """load platform operation"""
-        module = importlib.import_module(PLATFORM_OPERATION_MAPPING[self.platform_name])
+        module = importlib.import_module(PLATFORM_OPERATION_MAPPING[self.platform])
 
-        for _, cls in inspect.getmembers(module, predicate=inspect.isclass):
-            members = inspect.getmembers(cls, predicate=DispatchFactory.is_method_or_function)
-            names = [name for (name, _) in members if not DispatchFactory.is_inherited_member(cls, name)]
-            for name in names:
-                if name == self.operation_name and (self.class_name is None or self.class_name == cls.__name__):
-                    return cls.__module__, cls.__name__, name
+        for _, clazz in inspect.getmembers(module, predicate=inspect.isclass):
+            operations = DispatchFactory.get_platform_operations(clazz)
+            for operation in operations:
+                if self.is_matched_platform_operation(clazz, operation):
+                    return clazz.__module__, clazz.__name__, operation
 
-        raise RuntimeError('Not found platform {} operation {}'.format(self.platform_name, self.operation_name))
+        raise RuntimeError('Not found platform {} operation {}'.format(self.platform, self.operation))
 
     def dispatch(self, **kwargs):
         """dispatch platform operation"""
-        module, class_name, operation_name = self.load_platform_operation()
-        platform_module = importlib.import_module(module)
-        platform_class = getattr(platform_module, class_name)
-        return getattr(platform_class(), operation_name)(**kwargs)
+        module, class_name, operation = self.load_platform_operation()
+        clazz = getattr(importlib.import_module(module), class_name)
+        return getattr(clazz(), operation)(**kwargs)
 
     @staticmethod
     def is_method_or_function(member):
@@ -54,13 +63,13 @@ class DispatchFactory(object):
         return inspect.ismethod(member) or inspect.isfunction(member)
 
     @staticmethod
-    def is_inherited_member(cls, member_name):
+    def is_inherited_member(obj, name):
         """check member is inherited from parent"""
-        member_id = id(getattr(cls, member_name))
-        mro = inspect.getmro(cls)
+        member_id = id(getattr(obj, name))
+        mro = inspect.getmro(obj)
 
         for parent in mro[1:]:
-            if hasattr(parent, member_name) and id(getattr(parent, member_name)) == member_id:
+            if hasattr(parent, name) and id(getattr(parent, name)) == member_id:
                 return True
 
         return False
