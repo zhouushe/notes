@@ -96,5 +96,6 @@ class DispatchFactory(object):
 
 if __name__ == '__main__':
     DispatchFactory.dispatch('platform1', 'demo_operation', name='dog', age=3)
+    DispatchFactory.dispatch('platform2', 'demo_operation', name='dog', age=5)
 
 ```
