@@ -22,11 +22,13 @@ PLATFORM_OPERATION_MAPPING = {
 class DispatchFactory(object):
     """Dispatch factory class"""
 
-    def __init__(self, platform, operation):
-        self.platform = platform
-
+    @staticmethod
+    def get_operation_and_class_name(operation):
+        """get operations and class name"""
         match = re.match(r'^(\w+)\.(\w+)$', operation)
-        self.class_name, self.operation = match.groups() if match else (None, operation)
+        class_name, operation = match.groups() if match else (None, operation)
+        LOGGER.debug(f'class={class_name}, operation={operation}')
+        return class_name, operation
 
     @staticmethod
     def get_platform_operations(clazz):
@@ -35,27 +37,31 @@ class DispatchFactory(object):
         operations = [name for (name, _) in members if not DispatchFactory.is_inherited_member(clazz, name)]
         return operations
 
-    def is_matched_platform_operation(self, clazz, operation):
-        """check if matched platform operation"""
-        return self.operation == operation and (self.class_name is None or self.class_name == clazz.__name__)
+    @staticmethod
+    def is_matched_operation(clazz, class_name, operation, target_operation):
+        """check if matched operation"""
+        return target_operation == operation and (class_name is None or class_name == clazz.__name__)
 
-    def load_platform_operation(self):
+    @staticmethod
+    def load_platform_operation(platform, class_name, target_operation):
         """load platform operation"""
-        module = importlib.import_module(PLATFORM_OPERATION_MAPPING[self.platform])
+        module = importlib.import_module(PLATFORM_OPERATION_MAPPING[platform])
 
         for _, clazz in inspect.getmembers(module, predicate=inspect.isclass):
             operations = DispatchFactory.get_platform_operations(clazz)
             for operation in operations:
-                if self.is_matched_platform_operation(clazz, operation):
+                if DispatchFactory.is_matched_operation(clazz, class_name, operation, target_operation):
                     return clazz.__module__, clazz.__name__, operation
 
-        raise RuntimeError('Not found platform {} operation {}'.format(self.platform, self.operation))
+        raise RuntimeError('Not found operation {} in {} for {}'.format(target_operation, class_name, platform))
 
-    def dispatch(self, **kwargs):
+    @staticmethod
+    def dispatch(platform, operation, **kwargs):
         """dispatch platform operation"""
-        module, class_name, operation = self.load_platform_operation()
+        class_name, target_operation = DispatchFactory.get_operation_and_class_name(operation)
+        module, class_name, _ = DispatchFactory.load_platform_operation(platform, class_name, target_operation)
         clazz = getattr(importlib.import_module(module), class_name)
-        return getattr(clazz(), operation)(**kwargs)
+        return getattr(clazz(), target_operation)(**kwargs)
 
     @staticmethod
     def is_method_or_function(member):
