@@ -40,7 +40,7 @@ class DispatchFactory(object):
     @staticmethod
     def is_matched_operation(clazz, class_name, operation, target_operation):
         """check if matched operation"""
-        return target_operation == operation and (class_name is None or class_name == clazz.__name__)
+        return operation == target_operation and (class_name is None or class_name == clazz.__name__)
 
     @staticmethod
     def load_platform_operation(platform, class_name, target_operation):
