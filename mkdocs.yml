@@ -75,6 +75,8 @@ markdown_extensions:
 
 plugins:
   - search
+  - markdown-enhancements
+  - awesome-pages
 
 extra_css:
   - css/custom.css
