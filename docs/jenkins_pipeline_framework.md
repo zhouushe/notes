@@ -1,88 +1,88 @@
 # Prerequisites
 
 ## Configure Webhooks on GitHub Repo
-**Settings** → **Hooks** → **Webhooks**
+**Settings** → **Hooks** → **Webhooks**  
 - Payload URL  
-  - `https://<username>:<token>@<jenkins-server>/generic-webhook-trigger/invoke`
+  - `https://<username>:<token>@<jenkins-server>/generic-webhook-trigger/invoke`  
 - Content type  
-  - `application/json`
+  - `application/json`  
 - SSL verification  
-  - `Enable SSL verification`
+  - `Enable SSL verification`  
 - Which events would you like to trigger this webhook?  
-  - Issue comments
-  - Labels
-  - Pull requests
+  - Issue comments  
+  - Labels  
+  - Pull requests  
   - Pushes
 
 ## Configure Credentials on Jenkins Server
-**Credentials** → **System** → **Global credentials (unrestricted)** → **Add Credentials**
-- Credentials
-  - Scope (e.g., `Global (Jenkins, nodes, items, all child items, etc)`)
-  - Username
-  - Treat username as secret
-  - Password
-  - ID (e.g., `GIT_BUILDER`)
+**Credentials** → **System** → **Global credentials (unrestricted)** → **Add Credentials**  
+- Credentials  
+  - Scope (e.g., `Global (Jenkins, nodes, items, all child items, etc)`)  
+  - Username  
+  - Treat username as secret  
+  - Password  
+  - ID (e.g., `GIT_BUILDER`)  
   - Description (e.g., `GitHub token for service account xxx`)
 
 ## Configure Environment on Jenkins Server
-**Manage Jenkins** → **System**
-- Global properties
-  - Environment variables
-    - Name (e.g., `CFG_JENKINS_ENV`)
+**Manage Jenkins** → **System**  
+- Global properties  
+  - Environment variables  
+    - Name (e.g., `CFG_JENKINS_ENV`)  
     - Value (e.g., `test` or `product`)
 
 ## Configure Library on Jenkins Server
-**Manage Jenkins** → **System**
-- Library
-  - Name (e.g., `xxx-qe-jenkins`)
-  - Default version (e.g., `main`)
-- Allow default version to be overridden
-- Include @Library changes in job recent changes
-- Retrieval method (`Modern SCM`)
-  - Source Code Management (`Git`)
-    - Project Repository (e.g., `https://<GitHub-server>/<owner>/<repo>.git`)
-    - Credentials (e.g., `GitHub token for service account xxx`)
+**Manage Jenkins** → **System**  
+- Library  
+  - Name (e.g., `xxx-qe-jenkins`)  
+  - Default version (e.g., `main`)  
+- Allow default version to be overridden  
+- Include @Library changes in job recent changes  
+- Retrieval method (`Modern SCM`)  
+  - Source Code Management (`Git`)  
+    - Project Repository (e.g., `https://<GitHub-server>/<owner>/<repo>.git`)  
+    - Credentials (e.g., `GitHub token for service account xxx`)  
   - Library Path (optional) (e.g., `./`)
 
 ## Configure SMTP server on Jenkins Server
-**Manage Jenkins** → **System**
-- E-mail Notification
-  - SMTP server (e.g., `smtp.xxx.com`)
+**Manage Jenkins** → **System**  
+- E-mail Notification  
+  - SMTP server (e.g., `smtp.xxx.com`)  
   - Default user e-mail suffix (e.g., `@xxx.com`)
 
 ## Install Plugins on Jenkins Server
-**Manage Jenkins** → **Plugins**
-  - Generic Webhook Trigger
+**Manage Jenkins** → **Plugins**  
+  - Generic Webhook Trigger  
   - Lockable Resources
 
 ## Configure Jenkins Job `github_webhook_dispatcher` on Jenkins Server
-- Discard old builds
-  - Strategy (e.g., `Log Rotation`)
-    - Days to keep builds (e.g., `30` days)
-    - Max # of builds to keep (e.g., `500` records)
-- This project is parameterized
-  - String Parameter
-    - Name (e.g., `payload`)
-    - Default Value
-    - Trim the string
-- Triggers
-  - Generic Webhook Trigger
-    - Post content parameters
-      - Variable (e.g., `payload`)
-      - Expression (e.g., `$`)
-      - JSONPath
-    - Header parameters
-      - Request header (e.g., `X-GitHub-Event`)
-    - Cause
-      - GitHub web hook listener
-- Source Code Management
-  - Git
-    - Repositories
-      - Repository URL (e.g., `https://<GitHub-server>/<owner>/<repo>.git`)
-      - Credentials (e.g., `GitHub token for service account xxx`)
-    - Branches to build
-      - Branch Specifier (blank for 'any')  (e.g., `main`)
-- Pipeline
+- Discard old builds  
+  - Strategy (e.g., `Log Rotation`)  
+    - Days to keep builds (e.g., `30` days)  
+    - Max # of builds to keep (e.g., `500` records)  
+- This project is parameterized  
+  - String Parameter  
+    - Name (e.g., `payload`)  
+    - Default Value  
+    - Trim the string  
+- Triggers  
+  - Generic Webhook Trigger  
+    - Post content parameters  
+      - Variable (e.g., `payload`)  
+      - Expression (e.g., `$`)  
+      - JSONPath  
+    - Header parameters  
+      - Request header (e.g., `X-GitHub-Event`)  
+    - Cause  
+      - GitHub web hook listener  
+- Source Code Management  
+  - Git  
+    - Repositories  
+      - Repository URL (e.g., `https://<GitHub-server>/<owner>/<repo>.git`)  
+      - Credentials (e.g., `GitHub token for service account xxx`)  
+    - Branches to build  
+      - Branch Specifier (blank for 'any')  (e.g., `main`)  
+- Pipeline  
   - Definition (Pipeline script)
     ```groovy title="pipeline script"
     // println(this.currentBuild.getDescription())
@@ -100,8 +100,8 @@ _GitHub events (PULL_REQUEST, ISSUE_COMMENT, PUSH) to trigger Jenkins job `githu
 _Jenkins job can directly trigger pipeline which inherits base pipeline `BasePipeline` with payload as well._
 
 ## 1. Launch entry point `launch(this)` with Jenkins job (e.g., `github_webhook_dispatcher`, `check_code`) session
-**Jenkins pipeline can get `env` (e.g., `JENKINS_URL`, `JOB_URL`, `BUILD_URL`), `params` and `currentBuild` via session**
-- Initialize `env`, `params` and `currentBuild` with session
+**Jenkins pipeline can get `env` (e.g., `JENKINS_URL`, `JOB_URL`, `BUILD_URL`), `params` and `currentBuild` via session**  
+- Initialize `env`, `params` and `currentBuild` with session  
 - Get job name via `env.getProperty("JOB_NAME")`
 
 ## 2. Find all pipeline class which inherits supper class `Pipeline` and filter the pipeline class which is corresponding to `JOB_NAME`
@@ -159,12 +159,12 @@ _`loadEnvConfig(getEnvConfigType())` will call `getEnvConfigType()` in the match
 
 ### If the matched pipeline is `GithubWebhookDispatcherPipeline`
 - Load payload in `onInit()`  
-  _Load payload according to EVENT_TYPE (`x_github_event`) and PAYLOAD (`payload`)_
-  - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`, `JSONUtil.toBean(payload, PushPayload.class)`)
-- Start pipeline workflow in `start()`
-  - Find all pipeline class which inherits supper class `BaseWebhookPipeline`
-  - Check if it's supported payload (invoke `support()` in the the matched pipeline)
-  - Check if it's accepted payload VS pipeline annotation (invoke `accept(payload)` in the the matched pipeline)
+  _Load payload according to EVENT_TYPE (`x_github_event`) and PAYLOAD (`payload`)_  
+  - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`, `JSONUtil.toBean(payload, PushPayload.class)`)  
+- Start pipeline workflow in `start()`  
+  - Find all pipeline class which inherits supper class `BaseWebhookPipeline`  
+  - Check if it's supported payload (invoke `support()` in the the matched pipeline)  
+  - Check if it's accepted payload VS pipeline annotation (invoke `accept(payload)` in the the matched pipeline)  
   - Trigger the matched pipeline with payload
 
 ### If the matched pipeline is a subclass of `BaseWebhookPullRequestPipeline`
@@ -194,5 +194,5 @@ _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry po
 - Start pipeline workflow in `start()`
 
 ### If the matched pipeline is a direct subclass of `BasePipeline`
-_The matched pipeline class can override `execute()` or `start()` from super class `BasePipeline`_
+_The matched pipeline class can override `execute()` or `start()` from super class `BasePipeline`_  
 - Start pipeline workflow in `start()` directly from entry point `execute()`
