@@ -169,15 +169,15 @@ _`loadEnvConfig(getEnvConfigType())` will call `getEnvConfigType()` in the match
 
 ### If the matched pipeline is a subclass of `BaseWebhookPullRequestPipeline`
 _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `check_code`) session_  
-- Load payload in `onInit()`
-  - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`)
-  - Handle `GenericPullRequestPayload` payload (i.e. include property `PullRequestResponse`, `eventType`, `sender`, `repository`, `organization`)
-  - Wrap `GenericPullRequestPayloadWrapperImpl` class (e.g., wrap method `getBaseBranch()`, `getHeadBranch()`, `checkout()`, `updateStatus(...)`, `listFiles()`)
-- Get `PullRequestPayload` class in `getPayloadType()`
-- Get `XxxEnvConfig` class in `getEnvConfigType()`
-- Is supported payload (i.e. `PullRequestPayload`, `IssueCommentPayload`) in `Set<Class<? extends WebhookPayload>> support()`?
+- Load payload in `onInit()`  
+  - JSON payload to bean (`JSONUtil.toBean(payload, PullRequestPayload.class)`, `JSONUtil.toBean(payload, IssueCommentPayload.class)`)  
+  - Handle `GenericPullRequestPayload` payload (i.e. include property `PullRequestResponse`, `eventType`, `sender`, `repository`, `organization`)  
+  - Wrap `GenericPullRequestPayloadWrapperImpl` class (e.g., wrap method `getBaseBranch()`, `getHeadBranch()`, `checkout()`, `updateStatus(...)`, `listFiles()`)  
+- Get `PullRequestPayload` class in `getPayloadType()`  
+- Get `XxxEnvConfig` class in `getEnvConfigType()`  
+- Is supported payload (i.e. `PullRequestPayload`, `IssueCommentPayload`) in `Set<Class<? extends WebhookPayload>> support()`?  
 - Is accepted payload VS pipeline annotation in `accept(WebhookPayload payload)`? e.g.,  
-  `@GenericPullRequestListener(repository = ["<owner>/<repo>"], baseBranch = ["main"], action = [opened, reopened, synchronize], comment = "check xxx")`
+  `@GenericPullRequestListener(repository = ["<owner>/<repo>"], baseBranch = ["main"], action = [opened, reopened, synchronize], comment = "check xxx")`  
 - Start pipeline workflow in `start()`
 
 ### If the matched pipeline is a subclass of `BaseWebhookIssueCommentPipeline`
@@ -186,11 +186,11 @@ _It's similar to `BaseWebhookPullRequestPipeline`_
 
 ### If the matched pipeline is a subclass of `BaseWebhookPushPipeline`
 _Triggered by pipeline `GithubWebhookDispatcherPipeline`, and re-launch entry point `launch(this)` with Jenkins job (e.g., `deploy_code`) session_  
-- Get `PushPayload` class in `getPayloadType()`
-- Get `XxxEnvConfig` class in `getEnvConfigType()`
-- Is supported payload (i.e. `PushPayload`) in `Set<Class<? extends WebhookPayload>> support()`?
+- Get `PushPayload` class in `getPayloadType()`  
+- Get `XxxEnvConfig` class in `getEnvConfigType()`  
+- Is supported payload (i.e. `PushPayload`) in `Set<Class<? extends WebhookPayload>> support()`?  
 - Is accepted payload VS pipeline annotation in `accept(WebhookPayload payload)`? e.g.,  
-  `@PushListener(repository = ["<owner>/<repo>"], branch = ["main"])`
+  `@PushListener(repository = ["<owner>/<repo>"], branch = ["main"])`  
 - Start pipeline workflow in `start()`
 
 ### If the matched pipeline is a direct subclass of `BasePipeline`
