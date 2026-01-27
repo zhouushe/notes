@@ -4,7 +4,7 @@ echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" https://pkg.jenkins
 
 # Install JDK and Jenkins
 sudo apt-get update
-sudo apt-get install fontconfig openjdk-21-jre
+sudo apt-get install fontconfig openjdk-21-jre (sudo apt install openjdk-21-jdk)
 sudo apt-get install jenkins
 
 # Configure Jenkins Service
