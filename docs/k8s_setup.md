@@ -134,7 +134,7 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 # Option#2: Apply Flannel network
 # Apply Flannel CNI network plugin configuration to the Kubernetes cluster
 curl https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml -o kube-flannel.yml
-sed -i 's/\("Network":\s*"\).*\(\/[0-9]*\)"/\110.227.0.0\2"/' kube-flannel.yml
+# sed -i 's/\("Network":\s*"\).*\(\/[0-9]*\)"/\110.227.0.0\2"/' kube-flannel.yml
 kubectl apply -f kube-flannel.yml
 
 # Apply Flannel CNI network plugin configuration to the Kubernetes cluster
@@ -150,6 +150,20 @@ kubectl get pods -n kube-system --watch
 
 ## Join Cluster (Worker Nodes)
 Perform these steps on **each worker node**.
+```bash title="Add static route"
+# Add static route for cross-subnet node connectivity
+# e.g., control-plane node 10.27.28.35, worker node2 10.68.56.98
+sudo ip route add 10.27.28.0/24 via 10.68.56.1
+```
+
+### Configure kubectl
+- Set up the admin configuration
+```bash title="Set up the admin configuration"
+mkdir -p $HOME/.kube
+# Copy /etc/kubernetes/admin.conf from the control-plane node to $HOME/.kube/config on each worker node
+vi $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
 
 ### Set Hostname
 Set unique hostnames (e.g., `k8s-worker1`, `k8s-worker2`)
