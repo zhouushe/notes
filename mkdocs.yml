@@ -44,6 +44,7 @@ nav:
   - Home: index.md
   - Jenkins:
       - Jenkins Script: jenkins_script.md
+      - Jenkins Setup: jenkins_setup.md
   - K8S:
       - K8S Setup: k8s_setup.md
       - K8S Command: k8s_command.md
