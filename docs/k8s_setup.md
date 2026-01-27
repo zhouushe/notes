@@ -157,7 +157,7 @@ sudo ip route add 10.27.28.0/24 via 10.68.56.1
 ```
 
 ### Configure kubectl
-- Set up the admin configuration
+- Set up the kube configuration
 ```bash title="Set up the admin configuration"
 mkdir -p $HOME/.kube
 # Copy /etc/kubernetes/admin.conf from the control-plane node to $HOME/.kube/config on each worker node
