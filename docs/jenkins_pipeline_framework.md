@@ -3,7 +3,7 @@
 2. 上下文解析：从入口获取`session`上下文，解析env环境变量及`GithubEvent/payload`数据；
 3. 动态实例化：根据环境变量`JOB_NAME`匹配对应的`Pipeline`类并完成实例化；
 4. 事件对象封装：基于`GithubEvent`加载并实例化`Payload Bean`对象，适配不同`Github Webhook`事件类型；
-5. 注解与类型拦截：拦截支持的`Payload Bean`类型，解析`Pipeline`类上的注解；
+5. 注解与类型拦截：根据支持的`Payload Bean`信息，匹配`Pipeline`类上的注解并拦截；
 6. 执行调度：携带env与payload数据，在节点上触发Pipeline，其分支执行逻辑：\
   a. 若为`WebhookDispatcherPipeline`类型：则扫描所有继承`BaseWebhookPipeline`子类，触发对应`Jenkins Build`，之后重新进
 入初始化流程；\
