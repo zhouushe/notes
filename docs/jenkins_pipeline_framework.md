@@ -101,9 +101,9 @@
     // println(this.env.WORKSPACE)
     
     /**在Jenkins Pipeline中引入共享库的指令，下划线_指示Groovy在解析代码时将库导入到当前命名空间中，允许调用该库中定义的步骤和函数*/
-    @Library('xxx-qe-jenkins@main') _
+    @Library('devops-qe-jenkins@main') _
     /**Jenkins Pipeline的执行入口，this是该Jenkins session实例*/
-    com.corp.product.jenkins.Launcher.launch(this)
+    com.qe.jenkins.Launcher.launch(this)
     ```
 
 # Workflow
