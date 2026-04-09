@@ -9,8 +9,8 @@
 入初始化流程；\
   b. 若非上述类型：直接执行当前Pipeline类对应的`Jenkins Build`。
 
-# Workflow
-![Jenkins Pipeline Workflow](images/jenkins/jenkins_pipeline_workflow.jpg)
+# Architecture
+![Jenkins Pipeline Architecture](images/jenkins/jenkins_pipeline_architecture.jpg)
 
 # Prerequisites
 
